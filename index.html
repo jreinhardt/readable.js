@@ -29,6 +29,7 @@
 				var sentences = split_into_sentences(text);
 				var ns = sentences.length;
 				var nw = words.length;
+				var nc = count_complex_words(words);
 				var nl = count_letters(text);
 				var nsyl = 0;
 				var i;
@@ -38,13 +39,16 @@
 				var f = flesh_index(ns, nw, nsyl);
 				var cl = coleman_liau_index(ns, nw, nl);
 				var ari = automated_readability_index(ns, nw, nl);
+				var gf = gunning_fog_index(ns, nw, nc);
 				document.getElementById("num_syllables").innerHTML = nsyl;
 				document.getElementById("num_words").innerHTML = nw;
+				document.getElementById("num_complex_words").innerHTML = nw;
 				document.getElementById("num_sentences").innerHTML = ns;
 				document.getElementById("num_letters").innerHTML = nl;
 				document.getElementById("flesh").innerHTML = f;
 				document.getElementById("coleman_liau").innerHTML = cl;
 				document.getElementById("ari").innerHTML = ari;
+				document.getElementById("gunning_fog").innerHTML = gf;
 			}
 
 		</script>
