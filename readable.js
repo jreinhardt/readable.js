@@ -37,42 +37,6 @@ function count_syllables(word) {
 		}
 		return s;
 	}
-
-}
-
-/*
-Compute the Flesh readability index.
-
-This function returns the Flesh readability index given the number of
-sentences (ns), words (nw), and syllables (nsyl) in a text.
-*/
-function flesh_index(ns, nw, nsyl) {
-	return 206.835 - 1.015 * (nw / ns) - 84.6 * (nsyl / nw);
-}
-
-
-/*
-Compute the Coleman-Liau readability index.
-
-This functions returns the Coleman-Liau readability index given the number of
-sentences (ns), words (nw), and letters (nl).
- */
-function coleman_liau_index(ns, nw, nl) {
-	nw /= 100;
-	nl /= nw;
-	ns /= nw;
-	return 0.0588 * nl - 0.296 * ns - 15.8;
-}
-
-
-/*
-Compute the Automated Readability Index.
-
-This function returns the Automated Readability Index given the number of
-sentences (ns), words (nw), and letters (nl).
- */
-function automated_readability_index(ns, nw, nl) {
-	return 4.71 * (nl / nw) + 0.5 * (nw / ns) - 21.43;
 }
 
 
@@ -112,6 +76,43 @@ function count_letters(text) {
 	}
 	return nl;
 }
+
+
+/*
+Compute the Flesh readability index.
+
+This function returns the Flesh readability index given the number of
+sentences (ns), words (nw), and syllables (nsyl) in a text.
+*/
+function flesh_index(ns, nw, nsyl) {
+	return 206.835 - 1.015 * (nw / ns) - 84.6 * (nsyl / nw);
+}
+
+
+/*
+Compute the Coleman-Liau readability index.
+
+This functions returns the Coleman-Liau readability index given the number of
+sentences (ns), words (nw), and letters (nl).
+ */
+function coleman_liau_index(ns, nw, nl) {
+	nw /= 100;
+	nl /= nw;
+	ns /= nw;
+	return 0.0588 * nl - 0.296 * ns - 15.8;
+}
+
+
+/*
+Compute the Automated Readability Index.
+
+This function returns the Automated Readability Index given the number of
+sentences (ns), words (nw), and letters (nl).
+ */
+function automated_readability_index(ns, nw, nl) {
+	return 4.71 * (nl / nw) + 0.5 * (nw / ns) - 21.43;
+}
+
 
 
 function update(evt) {
