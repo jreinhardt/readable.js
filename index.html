@@ -45,7 +45,7 @@
 				var td2 = document.createElement('td');
 				$(td2).addClass('plot');
 				tr.appendChild(td2);
-				var p = Raphael(td2, 600, 16);
+				var p = Raphael(td2, 300, 16);
 				var r = p.rect(.5, .5, value, 15);
 				r.attr('fill', fill);
 				r.attr('stroke', stroke);
@@ -88,17 +88,20 @@
 				var smog = smog_grade(ns,nc);
 				updateTable('tableSMOG', smog, 4, 15);
 
-				document.getElementById("num_syllables").innerHTML = nsyl;
-				document.getElementById("num_words").innerHTML = nw;
-				document.getElementById("num_complex_words").innerHTML = nc;
-				document.getElementById("num_sentences").innerHTML = ns;
-				document.getElementById("num_letters").innerHTML = nl;
+				$('#results').show();
 			}
 
 		</script>
 
 
 		<style type="text/css">
+
+			#content {
+				width:600px;
+				margin:0 auto 0 auto;
+			}
+
+			/* Styles for bar chars */
 			table.diagram {
 				border-collapse:collapse;
 			}
@@ -119,46 +122,62 @@
 	</head>
 
 	<body>
+
+		<div id="content" style="display:none;">
+
+			<h1>readable.js</h1>
+
+			<p><i>readable.js</i> is a Javascript library for
+			readability analysis. Get it <a href="http://www.github.com/jreinhardt/readable.js">on github</a>.</p>
+
+			<h2>Try it now!</h2>
+			<p>Type or paste a text and see how readable it is compared to other
+			texts:</p>
+			<form name="form">
+				<textarea name="text" id="text" cols="80" rows="10"></textarea>
+			</form>
+
+			<div id="results" style="display:none;">
+				<h2>Flesch Reading Ease</h2>
+				<p>The Flesch Reading Ease test depends on the number of words per
+				sentence and the number of syllables per word. Higher values indicate
+				a better readability.
+				<a href="http://en.wikipedia.org/wiki/Flesch–Kincaid_Readability_Test">Read more</a>.</p>
+				<table id="tableFlesch" class="diagram"></table>
+
+				<h2>Coleman-Liau Index</h2>
+				<p>The Coleman-Liau index depends on the length of the words and the
+				number of words per sentence. Lower values indicate a better readability.
+				<a href="http://en.wikipedia.org/wiki/Coleman-Liau_index">Read more</a>.</p>
+				<table id="tableColemanLiau" class="diagram"></table>
+
+				<h2>Automated Readability Index</h2>
+				<p>The Automated Readability Index depends on length of the words and
+				the number of words per sentence. Lower values indicate a better readability.
+				<a href="http://en.wikipedia.org/wiki/Automated_Readability_Index">Read more</a>.</p>
+				<table id="tableAutomatedReadability" class="diagram"></table>
+
+				<h2>Gunning-Fog Index</h2>
+				<p>The Gunning-Fog index depends on the number of words per sentence and
+				the number of complex words. Lower values indicate a better readability.
+				<a href="http://en.wikipedia.org/wiki/Gunning-Fog_Index">Read more</a>.</p>
+				<table id="tableGunningFog" class="diagram"></table>
+
+				<h2>SMOG Grade</h2>
+				<p>The SMOG grade depends on the number of complex words per sentence.
+				Lower values indicate a better readability.
+				<a href="http://en.wikipedia.org/wiki/SMOG">Read more</a>.</p>
+				<table id="tableSMOG" class="diagram"></table>
+			</div>
+		</div>
+
 		<!-- Javascript support check -->
 		<div id="no_javascript" style="border:1px solid #f00;">This site requires JavaScript. Please enable JavaScript-support in your browser.</div>
 		<script type="text/javascript">
 			element = document.getElementById("no_javascript");
 			element.parentNode.removeChild(element);
+			$('#content').show();
 		</script>
-
-		<h1>Your Text</h1>
-		<form name="form">
-			<textarea name="text" id="text" cols="80" rows="10"></textarea>
-		</form>
-
-		<h1>Basic Stats</h1>
-		<table>
-			<tr><th>Number of syllables</th><td id="num_syllables">0</td></tr>
-			<tr><th>Number of words</th><td id="num_words">0</td></tr>
-			<tr><th>Number of complex words</th><td id="num_complex_words">0</td></tr>
-			<tr><th>Number of sentences</th><td id="num_sentences">0</td></tr>
-			<tr><th>Number of letters</th><td id="num_letters">0</td></tr>
-		</table>
-
-		<h1>Flesch Index</h1>
-		<p>The Flesch index is an uber way to check the readability of your text. <a href="http://en.wikipedia.org/wiki/Flesch_index">Read more</a>.</p>
-		<table id="tableFlesch" class="diagram"></table>
-
-		<h1>Coleman-Liau Index</h1>
-		<p>The Coleman-Liau index is an uber way to check the readability of your text. <a href="http://en.wikipedia.org/wiki/Coleman-Liau_index">Read more</a>.</p>
-		<table id="tableColemanLiau" class="diagram"></table>
-
-		<h1>Automated Readability Index</h1>
-		<p>The Automated Readability Index is an uber way to check the readability of your text. <a href="http://en.wikipedia.org/wiki/Automated_Readability_Index">Read more</a>.</p>
-		<table id="tableAutomatedReadability" class="diagram"></table>
-
-		<h1>Gunning-Fog Index</h1>
-		<p>The Gunning-Fog index is an uber way to check the readability of your text. <a href="http://en.wikipedia.org/wiki/Gunning-Fog_index">Read more</a>.</p>
-		<table id="tableGunningFog" class="diagram"></table>
-
-		<h1>SMOG Grade</h1>
-		<p>The SMOG grade is an uber way to check the readability of your text. <a href="http://en.wikipedia.org/wiki/SMOG">Read more</a>.</p>
-		<table id="tableSMOG" class="diagram"></table>
 
 	</body>
 </html>
