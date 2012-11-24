@@ -60,33 +60,13 @@
 			}
 
 			function update(evt) {
-				var text = document.form.text.value;
-				var words = split_into_words(text);
-				var sentences = split_into_sentences(text);
-				var ns = sentences.length;
-				var nw = words.length;
-				var nc = count_complex_words(words);
-				var nl = count_letters(text);
-				var nsyl = 0;
-				var i;
-				for (i = 0; i < words.length; i++) {
-					nsyl += count_syllables(words[i]);
-				}
+				var text = Text(document.form.text.value);
 
-				var f = flesh_index(ns, nw, nsyl);
-				updateTable('tableFlesch', f, 0, 2);
-
-				var cl = coleman_liau_index(ns, nw, nl);
-				updateTable('tableColemanLiau', cl, 1, 15);
-
-				var ari = automated_readability_index(ns, nw, nl);
-				updateTable('tableAutomatedReadability', ari, 2, 15);
-
-				var gf = gunning_fog_index(ns, nw, nc);
-				updateTable('tableGunningFog', gf, 3, 15);
-
-				var smog = smog_grade(ns,nc);
-				updateTable('tableSMOG', smog, 4, 15);
+				updateTable('tableFlesch', text.getFleschKincaidIndex(), 0, 2);
+				updateTable('tableColemanLiau', text.getColemanLiauIndex(), 1, 15);
+				updateTable('tableAutomatedReadability', text.getAutomatedReadabilityIndex(), 2, 15);
+				updateTable('tableGunningFog', text.getGunningFogIndex(), 3, 15);
+				updateTable('tableSMOG', text.getSmogGrade(), 4, 15);
 
 				$('#results').show();
 			}

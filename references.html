@@ -10,30 +10,19 @@
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('.reference').each(function() {
-				var text = $(this).html();
-				var words = split_into_words(text);
-				var sentences = split_into_sentences(text);
-				var ns = sentences.length;
-				var nw = words.length;
-				var nc = count_complex_words(words);
-				var nl = count_letters(text);
-				var nsyl = 0;
-				var i;
-				for (i = 0; i < words.length; i++) {
-					nsyl += count_syllables(words[i]);
-				}
+				var text = Text($(this).html());
 				var row = "<tr><td>";
 				row += $(this).attr('id');
 				row += "</td><td>";
-				row += flesh_index(ns, nw, nsyl).toFixed(1);
+				row += text.getFleschKincaidIndex().toFixed(1);
 				row += "</td><td>";
-				row += coleman_liau_index(ns, nw, nl).toFixed(1);
+				row += text.getColemanLiauIndex().toFixed(1);
 				row += "</td><td>";
-				row += automated_readability_index(ns, nw, nl).toFixed(1);
+				row += text.getAutomatedReadabilityIndex().toFixed(1);
 				row += "</td><td>";
-				row += gunning_fog_index(ns, nw, nc).toFixed(1);
+				row += text.getGunningFogIndex().toFixed(1);
 				row += "</td><td>";
-				row += smog_grade(ns,nc).toFixed(1);
+				row += text.getSmogGrade().toFixed(1);
 				row += " </td></tr>";
 				$('#results').append(row);
 				});
