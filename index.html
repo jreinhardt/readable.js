@@ -40,6 +40,7 @@
 				var cl = coleman_liau_index(ns, nw, nl);
 				var ari = automated_readability_index(ns, nw, nl);
 				var gf = gunning_fog_index(ns, nw, nc);
+				var smog = smog_grade(ns,nc);
 				document.getElementById("num_syllables").innerHTML = nsyl;
 				document.getElementById("num_words").innerHTML = nw;
 				document.getElementById("num_complex_words").innerHTML = nc;
@@ -49,6 +50,7 @@
 				document.getElementById("coleman_liau").innerHTML = cl;
 				document.getElementById("ari").innerHTML = ari;
 				document.getElementById("gunning_fog").innerHTML = gf;
+				document.getElementById("smog").innerHTML = smog;
 			}
 
 		</script>
@@ -77,6 +79,7 @@
 			<tr><th>Coleman-Liau index</th><td id="coleman_liau">0</td><td>positive, larger is more difficult</td></tr>
 			<tr><th>Automated Readability Index</th><td id="ari">0</td><td>positive, larger is more difficult</td></tr>
 			<tr><th>Gunning-Fog Index</th><td id="gunning_fog">0</td><td>positive, larger is more difficult</td></tr>
+			<tr><th>SMOG Grade</th><td id="smog">0</td><td>positive, larger is more difficult</td></tr>
 		</table>
 
 	</body>

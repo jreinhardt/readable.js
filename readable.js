@@ -190,3 +190,12 @@ words (nw) and complex words (nc).
 function gunning_fog_index(ns,nw,nc){
 	return 0.4*(nw/ns + 100.*nc/nw);
 }
+
+/*
+Compute the SMOG grade
+
+This function returns the SMOG grade given the number of sentences (ns) and the number of polysyllables (nc)
+*/
+function smog_grade(ns,nc){
+	return 1.043*Math.sqrt(30*nc/ns) + 3.1291;
+}
