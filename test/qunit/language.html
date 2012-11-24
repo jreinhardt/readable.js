@@ -13,65 +13,92 @@
 	<script src="../../readable.js"></script>
 	<script>
 
-		test("Counting letters", function() {
-
-			// Normal letters
-			equal(count_letters(""), 0);
-			equal(count_letters("aEuV"), 4);
-
-			// Ignore non-letters
-			equal(count_letters("a$!.-/\\_;"), 1);
-
-			// Funky letters
-			equal(count_letters("äöüÄÖÜß"), 6);
-		});
-
-		test("Splitting into words", function() {
-			deepEqual(split_into_words("Hello World"),["Hello","World"]);
-			deepEqual(split_into_words("Hello   "),["Hello"]);
-			deepEqual(split_into_words("Hello   World"),["Hello","World"]);
-			deepEqual(split_into_words("Hello      World"),["Hello","World"]);
-			deepEqual(split_into_words("Hello\nWorld"),["Hello","World"]);
-		});
-
-		test("Splitting into sentences", function() {
-			deepEqual(split_into_sentences("It was cold outside. The trees were covered in snow."),["It was cold outside","The trees were covered in snow"]);
-			deepEqual(split_into_sentences("The horror ..."),["The horror"]);
-			deepEqual(split_into_sentences("Did you see her? No I didn't!"),["Did you see her","No I didn't"]);
-			deepEqual(split_into_sentences("WTF??!!??"),["WTF"]);
-		});
-
-
 		test("Counting syllables", function() {
-			equal(count_syllables(""), 0);
-			equal(count_syllables("hello"), 2);
-			equal(count_syllables("world"), 1);
-			equal(count_syllables("reproducibility"), 7);
+			equal(countSyllables(""), 0);
+			equal(countSyllables("hello"), 2);
+			equal(countSyllables("world"), 1);
+			equal(countSyllables("reproducibility"), 7);
 		});
 
 		test("Checking for suffixes", function() {
-			equal(has_suffix("printed","ed"),true);
-			equal(has_suffix("printed","ted"),true);
-			equal(has_suffix("printed","printed"),true);
-			equal(has_suffix("printed","led"),false);
-			equal(has_suffix("printed","inkjetprinted"),false);
+			equal(hasSuffix("printed","ed"),true);
+			equal(hasSuffix("printed","ted"),true);
+			equal(hasSuffix("printed","printed"),true);
+			equal(hasSuffix("printed","led"),false);
+			equal(hasSuffix("printed","inkjetprinted"),false);
 		});
 
-		test("Check if word is complex", function() {
-			equal(is_complex_word("Hello"),false);
-			equal(is_complex_word("Reproduction"),true);
-			equal(count_syllables("Gravity"),3);
-			equal(is_complex_word("Gravity"),false);
-			equal(count_syllables("Harassment"),3);
-			equal(is_complex_word("Harassment"),true);
+		test("Text object", function() {
+			var text = Text("Yeah! Bucket the Rocket! Fantastic!");
+			equal(text.getText(),"Yeah! Bucket the Rocket! Fantastic!");
+			deepEqual(text.getSentences(),["Yeah","Bucket the Rocket","Fantastic"]);
+			deepEqual(text.getSentences(),["Yeah","Bucket the Rocket","Fantastic"]);
+			deepEqual(text.getWords(),["Yeah","Bucket", "the", "Rocket", "Fantastic"]);
+			deepEqual(text.getWords(),["Yeah","Bucket", "the", "Rocket", "Fantastic"]);
+			equal(text.getNumLetters(),28);
+			equal(text.getNumLetters(),28);
+			equal(text.getNumSyllables(),9);
+			equal(text.getNumSyllables(),9);
+			equal(text.getNumWords(),5);
+			equal(text.getNumWords(),5);
+			equal(text.getNumPolysyllables(),1);
+			equal(text.getNumPolysyllables(),1);
+			equal(text.getNumSentences(),3);
+			equal(text.getNumSentences(),3);
+			text.getFleshKincaidIndex();
+			text.getColemanLiauIndex();
+			text.getAutomatedReadabilityIndex();
+			text.getGunningFogIndex();
+			text.getSmogGrade();
 		});
+
+		test("Check if word is polysyllable", function() {
+			equal(isPolysyllable("Hello"),false);
+			equal(isPolysyllable("Reproduction"),true);
+			equal(countSyllables("Gravity"),3);
+			equal(isPolysyllable("Gravity"),false);
+			equal(countSyllables("Harassment"),3);
+			equal(isPolysyllable("Harassment"),true);
+		});
+
+
+		test("Counting letters", function() {
+
+			// Normal letters
+			equal(Text("").getNumLetters(), 0);
+			equal(Text("aEuV").getNumLetters(), 4);
+
+			// Ignore non-letters
+			equal(Text("a$!.-/\\_;").getNumLetters(), 1);
+
+			// Funky letters
+			equal(Text("äöüÄÖÜß").getNumLetters(), 6);
+		});
+
+
+		test("Splitting into words", function() {
+			deepEqual(Text("Hello World").getWords(),["Hello","World"]);
+			deepEqual(Text("Hello   ").getWords(),["Hello"]);
+			deepEqual(Text("Hello   World").getWords(),["Hello","World"]);
+			deepEqual(Text("Hello      World").getWords(),["Hello","World"]);
+			deepEqual(Text("Hello\nWorld").getWords(),["Hello","World"]);
+		});
+
+
+		test("Splitting into sentences", function() {
+			deepEqual(Text("It was cold outside. The trees were covered in snow.").getSentences(),["It was cold outside","The trees were covered in snow"]);
+			deepEqual(Text("The horror ...").getSentences(),["The horror"]);
+			deepEqual(Text("Did you see her? No I didn't!").getSentences(),["Did you see her","No I didn't"]);
+			deepEqual(Text("WTF??!!??").getSentences(),["WTF"]);
+		});
+
 
 		test("Count complex words", function() {
-			equal(count_complex_words(split_into_words("Hallo")),0);
-			equal(count_complex_words(split_into_words("Hello Mister representive")),1);
+			equal(Text("Hallo").getNumPolysyllables(),0);
+			equal(Text("Hello Mister representive").getNumPolysyllables(),1);
 		});
-	</script>
 
+	</script>
 
 </body>
 </html>

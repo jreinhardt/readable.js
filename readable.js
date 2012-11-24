@@ -4,11 +4,11 @@ Count syllables in a word.
 This function returns the approximate number of syllables in the given word.
 It uses the heuristic approach described in the article
 
-    Talburt: "The Flesch Index: An Easily Programmable Readability Analysis
-    Algorithm"
+	Talburt: "The Flesch Index: An Easily Programmable Readability Analysis
+	Algorithm"
 */
-function count_syllables(word) {
-	n = word.length;
+function countSyllables(word) {
+	var n = word.length;
 	if (n == 0) {
 		return 0;
 	} else if (n <= 3) {
@@ -39,21 +39,23 @@ function count_syllables(word) {
 	}
 }
 
+
 /*
 check word for suffix
 */
-function has_suffix(word,suffix){
+function hasSuffix(word,suffix){
 	return word.slice(word.length - suffix.length) == suffix;
 }
 
-/*
-check word for complexity
 
-Complex words are assumed to be those with more than 3 syllables, not counting
+/*
+check word for polysyllable
+
+Polysyllables are the words with more than 3 syllables, not counting
 common suffixes like -es, -ed, -ing, -ity.
 */
-function is_complex_word(word) {
-	var n_syl = count_syllables(word);
+function isPolysyllable(word) {
+	var n_syl = countSyllables(word);
 	//handle clear cases
 	if(n_syl < 3){
 		return false;
@@ -64,7 +66,7 @@ function is_complex_word(word) {
 	//suffix
 	suffixes = new Array("es","ed","ing","ity");
 	for (var i=0; i < suffixes.length;i++){
-		if (has_suffix(word,suffixes[i])){
+		if (hasSuffix(word,suffixes[i])){
 			return false;
 		}
 	}
@@ -73,129 +75,208 @@ function is_complex_word(word) {
 
 
 /*
-count complex words
-
-Given an array of words this function returns the number of complex words in
-this array.
+Factory for Text objects
 */
-function count_complex_words(words){
-	var n_complex = 0;
-	for(var i=0; i < words.length;i++){
-		if(is_complex_word(words[i])){
-			n_complex += 1;
+function Text(text){
+	var members = {};
+
+	function memoize(key,calculator) {
+		if(members[key] == undefined){
+			members[key] = calculator();
+		}
+		return members[key];
+	};
+
+	var obj = {
+		getText: function(){return text;},
+		getSentences: function(){return memoize("sentences",splitIntoSentences);},
+		getWords: function(){return memoize("words",splitIntoWords);},
+		getNumLetters: function(){return memoize("numLetters",countLetters);},
+		getNumSyllables: function(){return memoize("numSyllables",countTextSyllables);},
+		getNumWords: function(){return memoize("numWords",countWords);},
+		getNumPolysyllables: function(){return memoize("numPolysyllables",countPolysyllables);},
+		getNumSentences: function(){return memoize("numSentences",countSentences);},
+
+		/*
+		Compute the Flesh readability index.
+
+		Returns the Flesh readability index, a number (usually) between 0
+		and 100, where larger numbers indicate easier text
+
+		https://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+		*/
+		getFleshKincaidIndex: function() {
+			var wps = this.getNumWords() / this.getNumSentences();
+			var spw = this.getNumSyllables() / this.getNumWords();
+			return 206.835 - 1.015 * wps - 84.6 * spw;
+		},
+
+		/*
+		Compute the Coleman-Liau readability index.
+
+		This functions returns the Coleman-Liau readability index indicating
+		the number of years of education necessary to understand the text.
+
+		https://en.wikipedia.org/wiki/Coleman-Liau_Index
+		 */
+		getColemanLiauIndex: function() {
+			var lpw = 100*this.getNumLetters()/this.getNumWords();
+			var spw = 100*this.getNumSentences()/this.getNumWords();
+			return 0.0588 * lpw - 0.296 * spw - 15.8;
+		},
+
+
+		/*
+		Compute the Automated Readability Index.
+
+		This function returns the Automated Readability Index indicating
+		the number of years of education necessary to understand the text.
+
+		https://en.wikipedia.org/wiki/Automated_Readability_Index
+		 */
+		getAutomatedReadabilityIndex: function() {
+			var lpw = this.getNumLetters()/this.getNumWords();
+			var wps = this.getNumWords() / this.getNumSentences();
+			return 4.71 * lpw + 0.5 * wps - 21.43;
+		},
+
+
+		/*
+		Compute the Gunning-Fog Index
+
+		This function returns the Gunning-Fog index indicating
+		the number of years of education necessary to understand the text.
+
+		https://en.wikipedia.org/wiki/Gunning_fog_index
+		*/
+		getGunningFogIndex: function(){
+			var wps = this.getNumWords() / this.getNumSentences();
+			var ppw = this.getNumPolysyllables() / this.getNumWords();
+			return 0.4*(wps + 100.*ppw);
+		},
+
+		/*
+		Compute the SMOG grade
+
+		This function returns the SMOG indicating the number of years of
+		education necessary to understand the text. It is slightly different
+		from the SMOG Index.
+
+		https://en.wikipedia.org/wiki/SMOG
+		*/
+		getSmogGrade: function(ns,nc){
+			var pps = this.getNumPolysyllables() / this.getNumSentences();
+			return 1.043*Math.sqrt(30*pps) + 3.1291;
 		}
 	}
-	return n_complex;
-}
 
 
-/*
-Split a text into words.
+	/*
+	Split a text into words.
 
-This function returns an array containing all the words in the given text.
-*/
-function split_into_words(text) {
-	var res = new Array();
-	var words = text.split(/[\s?!:;,\.]+/);
-	for(var i=0;i<words.length;i++){
-		var word = words[i].trim();
-		if(word == ""){
-			continue;
+	Returns an array containing all the words of the text.
+	*/
+	function splitIntoWords() {
+		var res = new Array();
+		var words = text.split(/[\s?!:;,\.]+/);
+		for(var i=0;i<words.length;i++){
+			var word = words[i].trim();
+			if(word == ""){
+				continue;
+			}
+			res.push(word);
 		}
-		res.push(word);
+		return res;
 	}
-	return res;
-}
 
 
-/*
-Split a text into sentences.
+	/*
+	Split a text into sentences.
 
-This function returns an array containing all the sentences in the given text.
-*/
-function split_into_sentences(text) {
-	var res = new Array();
-	var sentences = text.split(/[?!:;\.]+/)
-	for(var i=0;i<sentences.length;i++){
-		var sentence = sentences[i].trim();
-		if(sentence == ""){
-			continue;
+	Returns an array containing all the sentences of the text.
+	*/
+	function splitIntoSentences() {
+		var res = new Array();
+		var sentences = text.split(/[?!:;\.]+/)
+		for(var i=0;i<sentences.length;i++){
+			var sentence = sentences[i].trim();
+			if(sentence == ""){
+				continue;
+			}
+			res.push(sentence);
 		}
-		res.push(sentence);
+		return res;
 	}
-	return res;
-}
 
 
-/*
-Count the letters in a text.
+	/*
+	Count the letters in a text.
 
-This function returns the number of letters ([a-zA-Z]) in the given text.
-*/
-function count_letters(text) {
-	var nl = 0;
-	var i;
-	for (i = 0; i < text.length; i++) {
-		var c = text.charCodeAt(i);
-		if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
-			nl++;
+	This function returns the number of letters ([a-zA-Z]) in the given text.
+	*/
+	function countLetters() {
+		var nl = 0;
+		for (var i = 0; i < text.length; i++) {
+			var c = text.charCodeAt(i);
+			if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
+				nl++;
+			}
 		}
+		return nl;
 	}
-	return nl;
+
+
+	/*
+	Count the syllables
+
+	Returns the number of syllables in the text.
+	*/
+	function countTextSyllables(){
+		var ns = 0;
+		for(var i = 0; i < obj.getWords().length; i++){
+			ns += countSyllables(obj.getWords()[i]);
+		}
+		return ns;
+	}
+
+
+	/*
+	Count words
+
+	Returns the number of words in the text.
+	*/
+	function countWords(){
+		return obj.getWords().length;
+	}
+
+
+	/*
+	Count polysyllables
+
+	Returns the number of polysyllables in the text. Polysyllables are words
+	with three or more syllables, not counting some very common suffixes.
+	*/
+	function countPolysyllables(){
+		var n_p = 0;
+		for(var i=0; i < obj.getWords().length;i++){
+			if(this.isPolysyllable(obj.getWords()[i])){
+				n_p += 1;
+			}
+		}
+		return n_p;
+	}
+
+
+	/*
+	Count sentences
+
+	Return the number of sentences in the text.
+	*/
+	function countSentences(){
+		return obj.getSentences().length;
+	}
+
+
+	return obj;
 }
 
-
-/*
-Compute the Flesh readability index.
-
-This function returns the Flesh readability index given the number of
-sentences (ns), words (nw), and syllables (nsyl) in a text.
-*/
-function flesh_index(ns, nw, nsyl) {
-	return 206.835 - 1.015 * (nw / ns) - 84.6 * (nsyl / nw);
-}
-
-
-/*
-Compute the Coleman-Liau readability index.
-
-This functions returns the Coleman-Liau readability index given the number of
-sentences (ns), words (nw), and letters (nl).
- */
-function coleman_liau_index(ns, nw, nl) {
-	nw /= 100;
-	nl /= nw;
-	ns /= nw;
-	return 0.0588 * nl - 0.296 * ns - 15.8;
-}
-
-
-/*
-Compute the Automated Readability Index.
-
-This function returns the Automated Readability Index given the number of
-sentences (ns), words (nw), and letters (nl).
- */
-function automated_readability_index(ns, nw, nl) {
-	return 4.71 * (nl / nw) + 0.5 * (nw / ns) - 21.43;
-}
-
-
-/*
-Compute the Gunning-Fog Index
-
-This function returns the Gunning-Fog index given the number of sentences (ns),
-words (nw) and complex words (nc).
-*/
-function gunning_fog_index(ns,nw,nc){
-	return 0.4*(nw/ns + 100.*nc/nw);
-}
-
-/*
-Compute the SMOG grade
-
-This function returns the SMOG grade given the number of sentences (ns) and the number of polysyllables (nc)
-*/
-function smog_grade(ns,nc){
-	return 1.043*Math.sqrt(30*nc/ns) + 3.1291;
-}
