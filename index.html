@@ -12,10 +12,10 @@
 			Auto-update with typing time-out.
 			*/
 			var autoUpdateTimer;
-			var AUTO_UPDATE_TIMEOUT = 1000; // in ms
+			var AUTO_UPDATE_TIMEOUT = 500; // in ms
 
 			$(document).ready(function() {
-				$('#text').keyup(function() {
+				$('#text').on('input paste', function() {
 					clearTimeout(autoUpdateTimer);
 					if ($('#text').val) {
 						autoUpdateTimer = setTimeout(update, AUTO_UPDATE_TIMEOUT);
