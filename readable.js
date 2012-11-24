@@ -98,13 +98,11 @@ function split_into_words(text) {
 	var res = new Array();
 	var words = text.split(/[\s?!:;,\.]+/);
 	for(var i=0;i<words.length;i++){
-		if(words[i] == " "){
+		var word = words[i].trim();
+		if(word == ""){
 			continue;
 		}
-		if(words[i] == ""){
-			continue;
-		}
-		res.push(words[i]);
+		res.push(word);
 	}
 	return res;
 }
@@ -116,7 +114,16 @@ Split a text into sentences.
 This function returns an array containing all the sentences in the given text.
 */
 function split_into_sentences(text) {
-	return text.split(/[?!:;\.]+/)
+	var res = new Array();
+	var sentences = text.split(/[?!:;\.]+/)
+	for(var i=0;i<sentences.length;i++){
+		var sentence = sentences[i].trim();
+		if(sentence == ""){
+			continue;
+		}
+		res.push(sentence);
+	}
+	return res;
 }
 
 

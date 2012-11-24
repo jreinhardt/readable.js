@@ -34,6 +34,13 @@
 			deepEqual(split_into_words("Hello\nWorld"),["Hello","World"]);
 		});
 
+		test("Splitting into sentences", function() {
+			deepEqual(split_into_sentences("It was cold outside. The trees were covered in snow."),["It was cold outside","The trees were covered in snow"]);
+			deepEqual(split_into_sentences("The horror ..."),["The horror"]);
+			deepEqual(split_into_sentences("Did you see her? No I didn't!"),["Did you see her","No I didn't"]);
+			deepEqual(split_into_sentences("WTF??!!??"),["WTF"]);
+		});
+
 
 		test("Counting syllables", function() {
 			equal(count_syllables(""), 0);
@@ -61,6 +68,7 @@
 
 		test("Count complex words", function() {
 			equal(count_complex_words(split_into_words("Hallo")),0);
+			equal(count_complex_words(split_into_words("Hello Mister representive")),1);
 		});
 	</script>
 
