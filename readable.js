@@ -95,7 +95,18 @@ Split a text into words.
 This function returns an array containing all the words in the given text.
 */
 function split_into_words(text) {
-	return text.split(/[\s?!:;,\.]+/)
+	var res = new Array();
+	var words = text.split(/[\s?!:;,\.]+/);
+	for(var i=0;i<words.length;i++){
+		if(words[i] == " "){
+			continue;
+		}
+		if(words[i] == ""){
+			continue;
+		}
+		res.push(words[i]);
+	}
+	return res;
 }
 
 

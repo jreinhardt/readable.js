@@ -26,8 +26,17 @@
 			equal(count_letters("äöüÄÖÜß"), 6);
 		});
 
+		test("Splitting into words", function() {
+			deepEqual(split_into_words("Hello World"),["Hello","World"]);
+			deepEqual(split_into_words("Hello   "),["Hello"]);
+			deepEqual(split_into_words("Hello   World"),["Hello","World"]);
+			deepEqual(split_into_words("Hello      World"),["Hello","World"]);
+			deepEqual(split_into_words("Hello\nWorld"),["Hello","World"]);
+		});
+
 
 		test("Counting syllables", function() {
+			equal(count_syllables(""), 0);
 			equal(count_syllables("hello"), 2);
 			equal(count_syllables("world"), 1);
 			equal(count_syllables("reproducibility"), 7);
