@@ -39,6 +39,55 @@ function count_syllables(word) {
 	}
 }
 
+/*
+check word for suffix
+*/
+function has_suffix(word,suffix){
+	return word.slice(word.length - suffix.length) == suffix;
+}
+
+/*
+check word for complexity
+
+Complex words are assumed to be those with more than 3 syllables, not counting
+common suffixes like -es, -ed, -ing, -ity.
+*/
+function is_complex_word(word) {
+	var n_syl = count_syllables(word);
+	//handle clear cases
+	if(n_syl < 3){
+		return false;
+	} else if(n_syl > 3){
+		return true;
+	}
+	//if word has 3 syllables, it might be simple of complex depending on the
+	//suffix
+	simple_suffixes = new Array("es","ed","ing","ity");
+	for (var suffix in simple_suffixes){
+		if (has_suffix(word,suffix)){
+			return false;
+		}
+	}
+	return true;
+}
+
+
+/*
+count complex words
+
+Given an array of words this function returns the number of complex words in
+this array.
+*/
+function count_complex_words(words){
+	var n_complex = 0;
+	for(var i=0; i < words.length;i++){
+		if(is_complex_word(words[i])){
+			n_complex += 1;
+		}
+	}
+	return n_complex;
+}
+
 
 /*
 Split a text into words.
@@ -114,6 +163,17 @@ function automated_readability_index(ns, nw, nl) {
 }
 
 
+/*
+Compute the Gunning-Fog Index
+
+This function returns the Gunning-Fog index given the number of sentences (ns),
+words (nw) and complex words (nc).
+*/
+function gunning_fog_index(ns,nw,nc){
+	return 0.4*(nw/ns + 100.*nc/nw);
+}
+
+
 
 function update(evt) {
 	var text = document.form.word.value;
@@ -121,6 +181,7 @@ function update(evt) {
 	var sentences = split_into_sentences(text);
 	var ns = sentences.length;
 	var nw = words.length;
+	var nc = count_complex_words(words);
 	var nl = count_letters(text);
 	var nsyl = 0;
 	var i;
@@ -130,13 +191,16 @@ function update(evt) {
 	var f = flesh_index(ns, nw, nsyl);
 	var cl = coleman_liau_index(ns, nw, nl);
 	var ari = automated_readability_index(ns, nw, nl);
+	var gf = gunning_fog_index(ns, nw, nc);
 	document.getElementById("num_syllables").innerHTML = nsyl;
 	document.getElementById("num_words").innerHTML = nw;
+	document.getElementById("num_complex_words").innerHTML = nc;
 	document.getElementById("num_sentences").innerHTML = ns;
 	document.getElementById("num_letters").innerHTML = nl;
 	document.getElementById("flesh").innerHTML = f;
 	document.getElementById("coleman_liau").innerHTML = cl;
 	document.getElementById("ari").innerHTML = ari;
+	document.getElementById("gunning_fog").innerHTML = gf;
 }
 
 
