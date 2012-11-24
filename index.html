@@ -2,12 +2,29 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
+		<script src="http://code.jquery.com/jquery-1.8.3.min.js" type="text/javascript"></script>
 		<script src="readable.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
 
+
+			/*
+			Auto-update with typing time-out.
+			*/
+			var autoUpdateTimer;
+			var AUTO_UPDATE_TIMEOUT = 1000; // in ms
+
+			$(document).ready(function() {
+				$('#text').keyup(function() {
+					clearTimeout(autoUpdateTimer);
+					if ($('#text').val) {
+						autoUpdateTimer = setTimeout(update, AUTO_UPDATE_TIMEOUT);
+					}
+				});
+			});
+
 			function update(evt) {
-				var text = document.form.word.value;
+				var text = document.form.text.value;
 				var words = split_into_words(text);
 				var sentences = split_into_sentences(text);
 				var ns = sentences.length;
@@ -34,14 +51,17 @@
 	</head>
 
 	<body>
+
+		<!-- Javascript support check -->
 		<div id="no_javascript" style="border:1px solid #f00;">This site requires JavaScript. Please enable JavaScript-support in your browser.</div>
 		<script type="text/javascript">
 			element = document.getElementById("no_javascript");
 			element.parentNode.removeChild(element);
 		</script>
 
+
 		<form name="form">
-			<input type="text" name="word" /><input type="button" value="update" onclick="update()"/>
+			<textarea name="text" id="text" cols="80" rows="10"></textarea>
 		</form>
 		<table>
 			<tr><th>Number of syllables</th><td id="num_syllables">0</td></tr>
