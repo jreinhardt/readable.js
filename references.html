@@ -1,0 +1,557 @@
+<!-- Declaration of Independence, Shakespeare, Winnie the Pooh, Mark Twain,  -->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<script src="http://code.jquery.com/jquery-1.8.3.min.js" type="text/javascript"></script>
+		<script src="readable.js" type="text/javascript"></script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('.reference').each(function() {
+				var text = $(this).html();
+				var words = split_into_words(text);
+				var sentences = split_into_sentences(text);
+				var ns = sentences.length;
+				var nw = words.length;
+				var nc = count_complex_words(words);
+				var nl = count_letters(text);
+				var nsyl = 0;
+				var i;
+				for (i = 0; i < words.length; i++) {
+					nsyl += count_syllables(words[i]);
+				}
+				var row = "<tr><td> "
+				row += $(this).attr('id')
+				row += " </td><td> "
+				row += smog_grade(ns,nc).toFixed(1)
+				row += " </td></tr>"
+				$('#results').append(row);
+				});
+			});
+   </script>
+
+		<style>
+			.reference{display:none;}
+		</style>
+	</head>
+
+	<body>
+<!-- http://en.wikipedia.org/wiki/Declaration_of_Independence -->
+		<div id="declarationofindependence" class="reference">
+When in the Course of human events, it becomes necessary for one people to dissolve the political bands which have connected them with another, and to assume among the powers of the earth, the separate and equal station to which the Laws of Nature and of Nature's God entitle them, a decent respect to the opinions of mankind requires that they should declare the causes which impel them to the separation.
+We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.
+That to secure these rights, Governments are instituted among Men, deriving their just powers from the consent of the governed, That whenever any Form of Government becomes destructive of these ends, it is the Right of the People to alter or to abolish it, and to institute new Government, laying its foundation on such principles and organizing its powers in such form, as to them shall seem most likely to effect their Safety and Happiness. Prudence, indeed, will dictate that Governments long established should not be changed for light and transient causes; and accordingly all experience hath shewn, that mankind are more disposed to suffer, while evils are sufferable, than to right themselves by abolishing the forms to which they are accustomed. But when a long train of abuses and usurpations, pursuing invariably the same Object evinces a design to reduce them under absolute Despotism, it is their right, it is their duty, to throw off such Government, and to provide new Guards for their future security.
+Such has been the patient sufferance of these Colonies; and such is now the necessity which constrains them to alter their former Systems of Government. The history of the present King of Great Britain is a history of repeated injuries and usurpations, all having in direct object the establishment of an absolute Tyranny over these States. To prove this, let Facts be submitted to a candid world.
+He has refused his Assent to Laws, the most wholesome and necessary for the public good.
+He has forbidden his Governors to pass Laws of immediate and pressing importance, unless suspended in their operation till his Assent should be obtained; and when so suspended, he has utterly neglected to attend to them.
+He has refused to pass other Laws for the accommodation of large districts of people, unless those people would relinquish the right of Representation in the Legislature, a right inestimable to them and formidable to tyrants only.
+He has called together legislative bodies at places unusual, uncomfortable, and distant from the depository of their Public Records, for the sole purpose of fatiguing them into compliance with his measures.
+He has dissolved Representative Houses repeatedly, for opposing with manly firmness of his invasions on the rights of the people.
+He has refused for a long time, after such dissolutions, to cause others to be elected, whereby the Legislative Powers, incapable of Annihilation, have returned to the People at large for their exercise; the State remaining in the mean time exposed to all the dangers of invasion from without, and convulsions within.
+He has endeavoured to prevent the population of these States; for that purpose obstructing the Laws for Naturalization of Foreigners; refusing to pass others to encourage their migrations hither, and raising the conditions of new Appropriations of Lands.
+He has obstructed the Administration of Justice by refusing his Assent to Laws for establishing Judiciary Powers.
+He has made Judges dependent on his Will alone for the tenure of their offices, and the amount and payment of their salaries.
+He has erected a multitude of New Offices, and sent hither swarms of Officers to harass our people and eat out their substance.
+He has kept among us, in times of peace, Standing Armies without the Consent of our legislatures.
+He has affected to render the Military independent of and superior to the Civil Power.
+He has combined with others to subject us to a jurisdiction foreign to our constitution, and unacknowledged by our laws; giving his Assent to their Acts of pretended Legislation:
+For quartering large bodies of armed troops among us:
+For protecting them, by a mock Trial from punishment for any Murders which they should commit on the Inhabitants of these States:
+For cutting off our Trade with all parts of the world:
+For imposing Taxes on us without our Consent:
+For depriving us in many cases, of the benefit of Trial by Jury:
+For transporting us beyond Seas to be tried for pretended offences:
+For abolishing the free System of English Laws in a neighbouring Province, establishing therein an Arbitrary government, and enlarging its Boundaries so as to render it at once an example and fit instrument for introducing the same absolute rule into these Colonies
+For taking away our Charters, abolishing our most valuable Laws and altering fundamentally the Forms of our Governments:
+For suspending our own Legislatures, and declaring themselves invested with power to legislate for us in all cases whatsoever.
+He has abdicated Government here, by declaring us out of his Protection and waging War against us.
+He has plundered our seas, ravaged our coasts, burnt our towns, and destroyed the lives of our people.
+He is at this time transporting large Armies of foreign Mercenaries to compleat the works of death, desolation, and tyranny, already begun with circumstances of Cruelty & Perfidy scarcely paralleled in the most barbarous ages, and totally unworthy the Head of a civilized nation.
+He has constrained our fellow Citizens taken Captive on the high Seas to bear Arms against their Country, to become the executioners of their friends and Brethren, or to fall themselves by their Hands.
+He has excited domestic insurrections amongst us, and has endeavoured to bring on the inhabitants of our frontiers, the merciless Indian Savages whose known rule of warfare, is an undistinguished destruction of all ages, sexes and conditions.
+In every stage of these Oppressions We have Petitioned for Redress in the most humble terms: Our repeated Petitions have been answered only by repeated injury. A Prince, whose character is thus marked by every act which may define a Tyrant, is unfit to be the ruler of a free people.
+Nor have We been wanting in attentions to our British brethren. We have warned them from time to time of attempts by their legislature to extend an unwarrantable jurisdiction over us. We have reminded them of the circumstances of our emigration and settlement here. We have appealed to their native justice and magnanimity, and we have conjured them by the ties of our common kindred to disavow these usurpations, which, would inevitably interrupt our connections and correspondence. They too have been deaf to the voice of justice and of consanguinity. We must, therefore, acquiesce in the necessity, which denounces our Separation, and hold them, as we hold the rest of mankind, Enemies in War, in Peace Friends.
+We, therefore, the Representatives of the united States of America, in General Congress, Assembled, appealing to the Supreme Judge of the world for the rectitude of our intentions, do, in the Name, and by Authority of the good People of these Colonies, solemnly publish and declare, That these united Colonies are, and of Right ought to be Free and Independent States; that they are Absolved from all Allegiance to the British Crown, and that all political connection between them and the State of Great Britain, is and ought to be totally dissolved; and that as Free and Independent States, they have full Power to levy War, conclude Peace, contract Alliances, establish Commerce, and to do all other Acts and Things which Independent States may of right do. And for the support of this Declaration, with a firm reliance on the protection of divine Providence, we mutually pledge to each other our Lives, our Fortunes and our sacred Honor.
+		</div>
+
+<!--- http://www.gutenberg.org/cache/epub/28885/pg28885.txt -->
+		<div id="aliceinwonderland" class="reference">
+ALICE was beginning to get very tired of sitting by her
+sister on the bank, and of having nothing to do: once or twice she had
+peeped into the book her sister was reading, but it had no pictures or
+conversations in it, "and what is the use of a book," thought Alice,
+"without pictures or conversations?"
+So she was considering in her own mind (as well as she could, for the
+hot day made her feel very sleepy and stupid) whether the pleasure of
+making a daisy-chain would be worth the trouble of getting up and
+picking the daisies, when suddenly a White Rabbit with pink eyes ran
+close by her.
+There was nothing so very remarkable in that; nor did Alice think it
+so very much out of the way to hear the Rabbit say to itself, "Oh
+dear! Oh dear! I shall be too late!" (when she thought it over
+afterwards, it occurred to her that she ought to have wondered at this,
+but at the time it all seemed quite natural); but when the Rabbit
+actually _took a watch out of its waistcoat-pocket_, and looked at it,
+and then hurried on, Alice started to her feet, for it flashed across
+her mind that she had never before seen a rabbit with either a
+waistcoat-pocket, or a watch to take out of it, and burning with
+curiosity, she ran across the field after it, and was just in time to
+see it pop down a large rabbit-hole under the hedge.
+In another moment down went Alice after it, never once considering how
+in the world she was to get out again.
+The rabbit-hole went straight on like a tunnel for some way, and then
+dipped suddenly down, so suddenly that Alice had not a moment to think
+about stopping herself before she found herself falling down what seemed
+to be a very deep well.
+Either the well was very deep, or she fell very slowly, for she had
+plenty of time as she went down to look about her, and to wonder what
+was going to happen next. First, she tried to look down and make out
+what she was coming to, but it was too dark to see anything; then she
+looked at the sides of the well and noticed that they were filled with
+cupboards and book-shelves: here and there she saw maps and pictures
+hung upon pegs. She took down a jar from one of the shelves as she
+passed; it was labelled "ORANGE MARMALADE," but to her disappointment it
+was empty; she did not like to drop the jar for fear of killing
+somebody underneath, so managed to put it into one of the cupboards as
+she fell past it.
+"Well!" thought Alice to herself. "After such a fall as this, I shall
+think nothing of tumbling down stairs! How brave they'll all think me at
+home! Why, I wouldn't say anything about it, even if I fell off the top
+of the house!" (Which was very likely true.)
+Down, down, down. Would the fall _never_ come to an end? "I wonder how
+many miles I've fallen by this time?" she said aloud. "I must be getting
+somewhere near the centre of the earth. Let me see: that would be four
+thousand miles down. I think--" (for, you see, Alice had learnt several
+things of this sort in her lessons in the schoolroom, and though this
+was not a _very_ good opportunity for showing off her knowledge, as
+there was no one to listen to her, still it was good practice to say it
+over) "--yes, that's about the right distance--but then I wonder what
+Latitude or Longitude I've got to?" (Alice had no idea what Latitude
+was, or Longitude either, but thought they were nice grand words to
+say.)
+Presently she began again. "I wonder if I shall fall right _through_ the
+earth! How funny it'll seem to come out among the people that walk with
+their heads downwards! The Antipathies, I think--" (she was rather glad
+there _was_ no one listening, this time, as it didn't sound at all the
+right word) "--but I shall have to ask them what the name of the country
+is, you know. Please, Ma'am, is this New Zealand or Australia?" (and she
+tried to curtsey as she spoke--fancy _curtseying_ as you're falling
+through the air! Do you think you could manage it?) "And what an
+ignorant little girl she'll think me! No, it'll never do to ask: perhaps
+I shall see it written up somewhere."
+Down, down, down. There was nothing else to do, so Alice soon began
+talking again. "Dinah'll miss me very much to-night, I should think!"
+(Dinah was the cat.) "I hope they'll remember her saucer of milk at
+tea-time. Dinah, my dear, I wish you were down here with me! There are
+no mice in the air, I'm afraid, but you might catch a bat, and that's
+very like a mouse, you know. But do cats eat bats, I wonder?" And here
+Alice began to get rather sleepy, and went on saying to herself, in a
+dreamy sort of way, "Do cats eat bats? Do cats eat bats?" and sometimes,
+"Do bats eat cats?" for, you see, as she couldn't answer either
+question, it didn't much matter which way she put it. She felt that she
+was dozing off, and had just begun to dream that she was walking hand in
+hand with Dinah, and saying to her very earnestly, "Now, Dinah, tell me
+the truth: did you ever eat a bat?" when suddenly, thump! thump! down
+she came upon a heap of sticks and dry leaves, and the fall was over.
+Alice was not a bit hurt, and she jumped up on to her feet in a moment:
+she looked up, but it was all dark overhead; before her was another long
+passage, and the White Rabbit was still in sight, hurrying down it.
+There was not a moment to be lost: away went Alice like the wind, and
+was just in time to hear it say, as it turned a corner, "Oh my ears and
+whiskers, how late it's getting!" She was close behind it when she
+turned the corner, but the Rabbit was no longer to be seen: she found
+herself in a long, low hall, which was lit up by a row of lamps hanging
+from the roof.
+There were doors all round the hall, but they were all locked; and when
+Alice had been all the way down one side and up the other, trying every
+door, she walked sadly down the middle, wondering how she was ever to
+get out again.
+Suddenly she came upon a little three-legged table, all made of solid
+glass; there was nothing on it but a tiny golden key, and Alice's first
+idea was that this might belong to one of the doors of the hall; but,
+alas! either the locks were too large, or the key was too small, but at
+any rate it would not open any of them. However, on the second time
+round, she came upon a low curtain she had not noticed before, and
+behind it was a little door about fifteen inches high: she tried the
+little golden key in the lock, and to her great delight it fitted!
+Alice opened the door and found that it led into a small passage, not
+much larger than a rat-hole: she knelt down and looked along the passage
+into the loveliest garden you ever saw. How she longed to get out of
+that dark hall, and wander about among those beds of bright flowers and
+those cool fountains, but she could not even get her head through the
+doorway; "and even if my head would go through," thought poor Alice, "it
+would be of very little use without my shoulders. Oh, how I wish I could
+shut up like a telescope! I think I could, if I only knew how to begin."
+For, you see, so many out-of-the-way things had happened lately, that
+Alice had begun to think that very few things indeed were really
+impossible.
+There seemed to be no use in waiting by the little door, so she went
+back to the table, half hoping she might find another key on it, or at
+any rate a book of rules for shutting people up like telescopes: this
+time she found a little bottle on it ("which certainly was not here
+before," said Alice,) and tied round the neck of the bottle was a paper
+label, with the words "DRINK ME" beautifully printed on it in large
+letters.
+It was all very well to say "Drink me," but the wise little Alice was
+not going to do _that_ in a hurry. "No, I'll look first," she said, "and
+see whether it's marked '_poison_' or not;" for she had read several
+nice little stories about children who had got burnt, and eaten up by
+wild beasts, and other unpleasant things, all because they _would_ not
+remember the simple rules their friends had taught them: such as, that a
+red-hot poker will burn you if you hold it too long; and that, if you
+cut your finger _very_ deeply with a knife, it usually bleeds; and she
+had never forgotten that, if you drink much from a bottle marked
+"poison," it is almost certain to disagree with you, sooner or later.
+However, this bottle was _not_ marked "poison," so Alice ventured to
+taste it, and finding it very nice (it had, in fact, a sort of mixed
+flavour of cherry-tart, custard, pineapple, roast turkey, coffee, and
+hot buttered toast,) she very soon finished it off.
+"What a curious feeling!" said Alice. "I must be shutting up like a
+telescope."
+And so it was indeed: she was now only ten inches high, and her face
+brightened up at the thought that she was now the right size for going
+through that little door into that lovely garden. First, however, she
+waited for a few minutes to see if she was going to shrink any further:
+she felt a little nervous about this: "for it might end, you know," said
+Alice to herself, "in my going out altogether, like a candle. I wonder
+what I should be like then?" And she tried to fancy what the flame of a
+candle looks like after the candle is blown out, for she could not
+remember ever having seen such a thing.
+After a while, finding that nothing more happened, she decided on going
+into the garden at once; but, alas for poor Alice! when she got to the
+door, she found she had forgotten the little golden key, and when she
+went back to the table for it, she found she could not possibly reach
+it: she could see it quite plainly through the glass, and she tried her
+best to climb up one of the legs of the table, but it was too slippery;
+and when she had tired herself out with trying, the poor little thing
+sat down and cried.
+"Come, there's no use in crying like that!" said Alice to herself,
+rather sharply. "I advise you to leave off this minute!" She generally
+gave herself very good advice (though she very seldom followed it), and
+sometimes she scolded herself so severely as to bring tears into her
+eyes; and once she remembered trying to box her own ears for having
+cheated herself in a game of croquet she was playing against herself,
+for this curious child was very fond of pretending to be two people.
+"But it's no use now," thought poor Alice, "to pretend to be two people!
+Why there's hardly enough of me left to make _one_ respectable person!"
+Soon her eye fell on a little glass box that was lying under the table:
+she opened it, and found in it a very small cake, on which the words
+"EAT ME" were beautifully marked in currants. "Well, I'll eat it," said
+Alice, "and if it makes me grow larger, I can reach the key; and if it
+makes me grow smaller, I can creep under the door; so either way I'll
+get into the garden, and I don't care which happens!"
+She ate a little bit, and said anxiously to herself, "Which way? Which
+way?" holding her hand on the top of her head to feel which way it was
+growing, and she was quite surprised to find that she remained the same
+size; to be sure, this is what generally happens when one eats cake,
+but Alice had got so much into the way of expecting nothing but
+out-of-the-way things to happen, that it seemed quite dull and stupid
+for life to go on in the common way.
+So she set to work, and very soon finished off the cake.
+		</div>
+
+<!-- http://www.chicagotribune.com/news/nationworld/sns-mlk-ihaveadream,0,36081.story -->
+		<div id="ihaveadream" class="reference">
+I am happy to join with you today in what will go down in history as the greatest demonstration for freedom in the history of our nation.
+
+Five score years ago, a great American, in whose symbolic shadow we stand today, signed the Emancipation Proclamation. This momentous decree came as a great beacon light of hope to millions of Negro slaves who had been seared in the flames of withering injustice. It came as a joyous daybreak to end the long night of their captivity.
+
+But 100 years later, the Negro still is not free. One hundred years later, the life of the Negro is still sadly crippled by the manacles of segregation and the chains of discrimination. One hundred years later, the Negro lives on a lonely island of poverty in the midst of a vast ocean of material prosperity. One hundred years later, the Negro is still languished in the corners of American society and finds himself an exile in his own land. And so we've come here today to dramatize a shameful condition.
+
+In a sense we've come to our nation's capital to cash a check. When the architects of our republic wrote the magnificent words of the Constitution and the Declaration of Independence, they were signing a promissory note to which every American was to fall heir. This note was a promise that all men -- yes, black men as well as white men -- would be guaranteed the unalienable rights of life, liberty, and the pursuit of happiness.
+
+It is obvious today that America has defaulted on this promissory note insofar as her citizens of color are concerned. Instead of honoring this sacred obligation, America has given the Negro people a bad check, a check that has come back marked "insufficient funds."
+
+But we refuse to believe that the bank of justice is bankrupt. We refuse to believe that there are insufficient funds in the great vaults of opportunity of this nation. And so we've come to cash this check, a check that will give us upon demand the riches of freedom and security of justice. We have also come to his hallowed spot to remind America of the fierce urgency of now. This is no time to engage in the luxury of cooling off or to take the tranquilizing drug of gradualism. Now is the time to make real the promises of democracy. Now is the time to rise from the dark and desolate valley of segregation to the sunlit path of racial justice. Now is the time to lift our nation from the quicksands of racial injustice to the solid rock of brotherhood. Now is the time to make justice a reality for all of God's children.
+
+It would be fatal for the nation to overlook the urgency of the moment. This sweltering summer of the Negro's legitimate discontent will not pass until there is an invigorating autumn of freedom and equality. 1963 is not an end but a beginning. Those who hoped that the Negro needed to blow off steam and will now be content will have a rude awakening if the nation returns to business as usual. There will be neither rest nor tranquility in America until the Negro is granted his citizenship rights. The whirlwinds of revolt will continue to shake the foundations of our nation until the bright day of justice emerges. ****
+
+But there is something that I must say to my people who stand on the warm threshold which leads into the palace of justice. In the process of gaining our rightful place we must not be guilty of wrongful deeds. Let us not seek to satisfy our thirst for freedom by drinking from the cup of bitterness and hatred. We must forever conduct our struggle on the high plane of dignity and discipline. We must not allow our creative protest to degenerate into physical violence. Again and again we must rise to the majestic heights of meeting physical force with soul force. The marvelous new militancy which has engulfed the Negro community must not lead us to a distrust of all white people, for many of our white brothers, as evidenced by their presence here today, have come to realize that their destiny is tied up with our destiny. And they have come to realize that their freedom is inextricably bound to our freedom. We cannot walk alone.
+
+As we walk, we must make the pledge that we shall always march ahead. We cannot turn back. There are those who are asking the devotees of civil rights, "When will you be satisfied?" We can never be satisfied as long as the Negro is the victim of the unspeakable horrors of police brutality. We can never be satisfied as long as our bodies, heavy with the fatigue of travel, cannot gain lodging in the motels of the highways and the hotels of the cities. We cannot be satisfied as long as the Negro's basic mobility is from a smaller ghetto to a larger one. We can never be satisfied as long as our children are stripped of their selfhood and robbed of their dignity by signs stating "for whites only." We cannot be satisfied as long as a Negro in Mississippi cannot vote and a Negro in New York believes he has nothing for which to vote. No, no we are not satisfied and we will not be satisfied until justice rolls down like waters and righteousness like a mighty stream.
+
+I am not unmindful that some of you have come here out of great trials and tribulations. Some of you have come fresh from narrow jail cells. Some of you have come from areas where your quest for freedom left you battered by storms of persecution and staggered by the winds of police brutality. You have been the veterans of creative suffering. Continue to work with the faith that unearned suffering is redemptive.
+
+Go back to Mississippi, go back to Alabama, go back to South Carolina, go back to Georgia, go back to Louisiana, go back to the slums and ghettos of our northern cities, knowing that somehow this situation can and will be changed.
+
+Let us not wallow in the valley of despair. I say to you today my friends -- so even though we face the difficulties of today and tomorrow, I still have a dream. It is a dream deeply rooted in the American dream.
+
+I have a dream that one day this nation will rise up and live out the true meaning of its creed: "We hold these truths to be self-evident, that all men are created equal."
+
+I have a dream that one day on the red hills of Georgia the sons of former slaves and the sons of former slave owners will be able to sit down together at the table of brotherhood.
+
+I have a dream that one day even the state of Mississippi, a state sweltering with the heat of injustice, sweltering with the heat of oppression, will be transformed into an oasis of freedom and justice.
+
+I have a dream that my four little children will one day live in a nation where they will not be judged by the color of their skin but by the content of their character.
+
+I have a dream today.
+
+I have a dream that one day down in Alabama, with its vicious racists, with its governor having his lips dripping with the words of interposition and nullification -- one day right there in Alabama little black boys and black girls will be able to join hands with little white boys and white girls as sisters and brothers.
+
+I have a dream today.
+
+I have a dream that one day every valley shall be exalted, and every hill and mountain shall be made low, the rough places will be made plain, and the crooked places will be made straight, and the glory of the Lord shall be revealed and all flesh shall see it together.
+
+This is our hope. This is the faith that I go back to the South with. With this faith we will be able to hew out of the mountain of despair a stone of hope. With this faith we will be able to transform the jangling discords of our nation into a beautiful symphony of brotherhood. With this faith we will be able to work together, to pray together, to struggle together, to go to jail together, to stand up for freedom together, knowing that we will be free one day.
+
+This will be the day, this will be the day when all of God's children will be able to sing with new meaning "My country 'tis of thee, sweet land of liberty, of thee I sing. Land where my father's died, land of the Pilgrim's pride, from every mountainside, let freedom ring!"
+
+And if America is to be a great nation, this must become true. And so let freedom ring from the prodigious hilltops of New Hampshire. Let freedom ring from the mighty mountains of New York. Let freedom ring from the heightening Alleghenies of Pennsylvania.
+
+Let freedom ring from the snow-capped Rockies of Colorado. Let freedom ring from the curvaceous slopes of California.
+
+But not only that; let freedom ring from Stone Mountain of Georgia.
+
+Let freedom ring from Lookout Mountain of Tennessee.
+
+Let freedom ring from every hill and molehill of Mississippi -- from every mountainside.
+
+Let freedom ring. And when this happens, and when we allow freedom ring -- when we let it ring from every village and every hamlet, from every state and every city, we will be able to speed up that day when all of God's children -- black men and white men, Jews and Gentiles, Protestants and Catholics -- will be able to join hands and sing in the words of the old Negro spiritual: "Free at last! Free at last! Thank God Almighty, we are free at last!"
+		</div>
+
+<!-- http://staffweb.hkbu.edu.hk/ppp/cpr/toc.html -->
+		<div id="critiqueofpurereason" class="reference">
+OUR knowledge springs from two fundamental sources of the
+mind; the first is the capacity of receiving representations
+(receptivity for impressions), the second is the power of know-
+ing an object through these representations (spontaneity [in
+the production] of concepts). Through the first an object is given
+to us, through the second the object is thought in relation to
+that [given] representation (which is a mere determination of
+the mind). Intuition and concepts constitute, therefore, the ele-
+ments of all our knowledge, so that neither concepts without an
+intuition in some way corresponding to them, nor intuition with-
+out concepts, can yield knowledge. Both may be either pure or
+empirical. When they contain sensation (which presupposes the
+actual presence of the object), they are empirical. When there is
+no mingling of sensation with the representation,they are pure. 
+Sensation may be entitled the material of sensible knowledge. 
+Pure intuition, therefore, contains only the form under which
+ something is intuited; the pure concept only the form of the
+thought of an object in general. Pure intuitions or pure con-
+cepts alone are possible a priori, empirical intuitions and
+empirical concepts only a posteriori. 
+
+If the receptivity of our mind, its power of receiving re-
+presentations in so far as it is in any wise affected, is to be
+entitled sensibility, then the mind's power of producing repre-
+sentations from itself, the spontaneity of knowledge, should be
+called the understanding. Our nature is so constituted that
+our intuition can never be other than sensible; that is, it con-
+tains only the mode in which we are affected by objects. The
+faculty, on the other hand, which enables us to think the
+object of sensible intuition is the understanding. To neither
+of these powers may a preference be given over the other. 
+Without sensibility no object would be given to us, without
+understanding no object would be thought. Thoughts without
+content are empty, intuitions without concepts are blind. It
+is, therefore, just as necessary to make our concepts sensible,
+that is, to add the object to them in intuition, as to make
+our intuitions intelligible, that is, to bring them under con-
+cepts. These two powers or capacities cannot exchange their
+functions. The understanding can intuit nothing, the senses
+can think nothing. Only through their union can know-
+ledge arise. But that is no reason for confounding the
+contribution of either with that of the other; rather is it
+a strong reason for carefully separating and distinguishing
+the one from the other. We therefore distinguish the science
+of the rules of sensibility in general, that is, aesthetic, from
+the science of the rules of the understanding in general, that
+is, logic. 
+Logic, again, can be treated in a twofold manner, either
+as logic of the general or as logic of the special employment
+of the understanding. The former contains the absolutely
+necessary rules of thought without which there can be no
+employment whatsoever of the understanding. It therefore
+treats of understanding without any regard to difference in
+the objects to which the understanding may be directed. The
+logic of the special employment of the understanding contains
+the rules of correct thinking as regards a certain kind of
+objects. The former may be called the logic of elements, the
+latter the organon of this or that science. The latter is com-
+monly taught in the schools as a propaedeutic to the sciences,
+though, according to the actual procedure of human reason,
+it is what is obtained last of all, when the particular science
+
+under question has been already brought to such completion
+that it requires only a few finishing touches to correct and
+perfect it. For the objects under consideration must already
+be known fairly completely before it can be possible to pre-
+scribe the rules according to which a science of them is to
+be obtained. 
+ General logic is either pure or applied. In the former we
+abstract from all empirical conditions under which our under-
+standing is exercised, i.e. from the influence of the senses, the
+play of imagination, the laws of memory, the force of habit,
+inclination, etc. , and so from all sources of prejudice, indeed
+from all causes from which this or that knowledge may arise
+or seem to arise. For they concern the understanding only in
+so far as it is being employed under certain circumstances,
+and to become acquainted with these circumstances experi-
+ence is required. Pure general logic has to do, therefore, only
+with principles a priori, and is a canon of understanding and
+of reason, but only in respect of what is formal in their em-
+ployment, be the content what it may, empirical or tran-
+scendental. General logic is called applied, when it is directed
+to the rules of the employment of understanding under the
+subjective empirical conditions dealt with by psychology. 
+Applied logic has therefore empirical principles, although it
+is still indeed in so far general that it refers to the employ-
+ment of the understanding without regard to difference in the
+objects. Consequently it is neither a canon of the under-
+standing in general nor an organon of special sciences, but
+merely a cathartic of the common understanding. 
+In general logic, therefore, that part which is to constitute
+the pure doctrine of reason must be entirely separated from
+that which constitutes applied (though always still general)
+logic. The former alone is, properly speaking, a science,
+though indeed concise and dry, as the methodical exposition
+of a doctrine of the elements of the understanding is bound
+to be. There are therefore two rules which logicians must
+always bear in mind, in dealing with pure general logic:
+1. As general logic, it abstracts from all content of the
+knowledge of understanding and from all differences in its
+objects, and deals with nothing but the mere form of
+thought. 
+
+2. As pure logic, it has nothing to do with empirical prin-
+ciples, and does not, as has sometimes been supposed, borrow
+anything from psychology, which therefore has no influence
+whatever on the canon of the understanding. Pure logic is a
+body of demonstrated doctrine, and everything in it must be
+certain entirely a priori. 
+What I call applied logic (contrary to the usual meaning
+of this title, according to which it should contain certain
+exercises for which pure logic gives the rules) is a representa-
+tion of the understanding and of the rules of its necessary
+employment in concreto, that is, under the accidental sub-
+jective conditions which may hinder or help its application,
+and which are all given only empirically. It treats of attention,
+its impediments and consequences, of the source of error, of
+the state of doubt, hesitation, and conviction, etc. Pure general
+logic stands to it in the same relation as pure ethics, which
+contains only the necessary moral laws of a free will in general,
+stands to the doctrine of the virtues strictly so called -- the
+doctrine which considers these laws under the limitations of
+the feelings, inclinations, and passions to which men are
+more or less subject. Such a doctrine can never furnish a
+true and demonstrated science, because, like applied logic,
+it depends on empirical and psychological principles.
+		</div>
+
+<!-- http://www.thesun.co.uk/sol/homepage/showbiz/tv/im_a__celebrity/4662442/nadine-dorries-blasts-david-cameron.html -->
+		<div id="thesun" class="reference">
+ The 55-year-old MP, nicknamed Balls of Steel, blasted his “controlling” Downing Street regime.
+
+She said: “I long for the day Boris Johnson is Prime Minister.”
+
+And she declared: “Boris is my King of the Jungle.”
+
+In an explosive interview with The Sun, she blasted the Prime Minister over a “control mechanism” — claiming it “tampered with” MPs and the way they voted.
+
+And she accused critics within her party of an “infantile and stupid” reaction to her decision to become the first serving MP to sign up for ITV jungle show I’m A Celebrity Get Me Out of Here!
+
+Mid-Bedfordshire MP Nadine was suspended by the Conservatives and slammed for taking four weeks away from her constituents to compete in the Aussie jungle.
+
+But she refused to apologise over the “storm in a teacup” row.
+
+And she insisted Plebgate row Chief Whip Andrew Mitchell had given his blessing for her absence. 
+
+ Abortion campaigner Nadine has previously branded the Prime Minister and Chancellor George Osborne “arrogant posh boys”.
+
+And after being voted off I’m A Celebrity, she backed Mr Johnson to take over the top job and lead the Tories to a new election victory.
+
+She said: “I long for the day Boris Johnson is Prime Minister.
+
+“He is a good man and a hero of mine, and he can reach people other politicians can’t.
+
+“People say to me, ‘He’s such a liberal’ — but I don’t care.
+
+“I do believe this will happen, and that he will be Prime Minister. If he doesn’t, it might be the day I consider giving up being an MP.
+
+“There is a real control mechanism under Cameron in Number Ten now. MPs and how they vote are tampered with.
+
+“If Boris Johnson was Prime Minister and issues like abortion came to Parliament, it would be a free vote. And it would be a FREE vote.
+
+“He wouldn’t tamper with people’s views, unlike what happens now in Cameron’s Westminster, and he would be more statesmanlike.” 
+
+ Nadine, also dubbed Mad Nad, said she had no idea about the extent of the row surrounding her as she jetted Down Under.
+
+She said: “Your phone is taken away as soon as you land in Australia so I wasn’t talking to anyone.
+
+“But I started to notice I was attracting a lot of attention and guessed that something was going on at home. I didn’t know what.
+
+“It was very disturbing and I begged the show’s producers to tell me what was going on in a meeting — but they wouldn’t break the I’m A Celebrity rules.
+
+“It was part of the show conditions. The only thing they did say before I went into the jungle was I’d been suspended from the whip.”
+
+Nadine was blackballed amid claims by ex-Chief Whip Mitchell that she had misled him over her jungle adventure. But she said: “I did tell Andrew Mitchell I might be away for as long as a month and it would be controversial. He was on holiday in Antigua at the time. But at the end of the day I missed three parliamentary sessions and no legislation. 
+
+ “Sir George Young (the new Chief Whip) has asked for a meeting when I’m back in Britain.
+
+“But I can’t be de-selected. I’m MP for Mid-Bedfordshire till 2015 and will justify this to my constituents properly when I get home.”
+
+Nadine knows she risked sending her career into meltdown with the controversial move.
+
+Yet she hit back at critics, saying her temporary suspension was a bid to stop her causing trouble.
+
+And she brushed off questions about a Parliamentary probe into her behaviour — insisting she couldn’t care less about breaching the MPs’ code of conduct.
+
+She said: “I have achieved exactly what I set out to achieve by going into the jungle. I wanted to go in because I wanted to reach a wider audience.
+
+“But a degree of panic set in at Number Ten when they found out, because they thought I was going in to damage David Cameron and George Osborne.
+
+“They thought, ‘What can we do to distance her and rubbish her quickly before she rubbishes us’? It was completely infantile and stupid.”
+
+She went on: “I’m absolutely not worried about breaching the MPs’ code of conduct. What’s the penalty for a breach?
+
+“You have to stand up in the House of Commons and say, 'I’m so sorry I breached the code'. Do me a favour — I have bigger things to worry about than that. 
+
+ “I knew this would be controversial, but I never thought I had gone too far. And I don’t care about the furore because I believe I’ve broken new ground.
+
+“I want to make Westminster less stuffy and elite. All politicians have invisible veneers — like those ornaments with glass cases to stop them breaking.
+
+“Until we get over ourselves and smash those glass bubbles, we will always be distant from the people voting and can never truly represent them. I have broken ground from all of that, and it will mean that in future others will slowly start to follow in my footsteps.
+
+“I want to use my new status, and the fact that people know who I am, to take that controlling culture to pieces by influencing constituents. I want to create a platform to influence people on things like the 20-week abortion limit, euthanasia, and ageism in the media, and then their MPs.
+
+“When an MP is bombarded with emails from a constituent saying, ‘I agree with Nadine Dorries, which way are you voting’? it’s amazing how quickly their principles can change. Those views will then filter and cascade through to Parliament.”
+
+Even if she was fired, Nadine said it would not be the end of the world. She said: “If I was de-selected and lost my job, would I die? Would I lose my home? Would my family suffer?
+
+“No. I would have a wonderful family and a great life.”
+
+Nadine, who grew up in Liverpool, has three daughters - Philippa, 27, Jennifer, 25, and Cassandra, 20 - with ex-husband Paul Dorries. 
+
+ The Sun revealed how she has been dating vet Chris Hammond, who joined her in Australia after she was voted out on Wednesday.
+
+She said: “Chris is a good grounding for me. He’s coped with this very well. We were introduced by mutual friends and it’s going well. I have a really strong support network. That’s why nothing really affects me.
+
+“No one can take my friendships, my family or Chris away. Those are the things that keep me grounded and happy. No one can take away the things that make me want to get up in the morning.
+
+“I don’t regret going into the jungle, but I do regret the effect it’s had on my daughters, because these few weeks have been tough for them. But they are getting tougher all the time.”
+
+Nadine reckons she has a pretty thick skin. But she admitted she isn’t immune to feeling self-conscious — and has had Botox and filler treatments.
+
+She said: “I’ve never been aggressive with it, but I do use Botox and things. I don’t see any harm, millions of women do it.
+
+“Holding back the years is OK once you get to a certain age.”
+
+Nadine now can’t wait to return to Britain and be reunited with her family. She said: “I made some great friends in the jungle and we’ll definitely stay in touch.
+
+“But it was by far the hardest thing I have ever done.
+
+“I feel proud of myself for what I achieved there, but I haven’t managed to impress my daughters. They still think I’m a complete wimp.” 
+		</div>
+
+
+		<div id="Table">
+			<table id="results">
+				<tr><th> Name of text </th><th> SMOG Grade </th></tr>
+			</table>
+		</div>
+		
+	</body>
+</html>
