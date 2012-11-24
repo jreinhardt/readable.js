@@ -8,6 +8,13 @@
 
 		<script type="text/javascript">
 
+			REFERENCES = [
+				{name: 'Declaration of Independence', values: [48.1, 12.0, 13.9, 14.9, 13.3]},
+				{name: 'Alice in Wonderland', values: [80.8, 5.7, 6.0, 8.6, 7.7]},
+				{name: 'I have a Dream', values: [67.7, 8.0, 8.3, 11.2, 10.6]},
+				{name: 'Critique of pure Reason', values: [47.8, 11.7, 12.8, 14.6, 13.3]},
+				{name: 'Typical "The Sun" Article', values: [78.1, 6.7, 5.0, 8.0, 8.5]}
+			]
 
 			/*
 			Auto-update with typing time-out.
@@ -28,7 +35,7 @@
 				document.getElementById(table).innerHTML = '';
 			}
 
-			function addRow(table, label, value) {
+			function addRow(table, label, value, fill, stroke) {
 				var tr = document.createElement('tr');
 				document.getElementById(table).appendChild(tr);
 				var td1 = document.createElement('td');
@@ -40,15 +47,16 @@
 				tr.appendChild(td2);
 				var p = Raphael(td2, 600, 16);
 				var r = p.rect(.5, .5, value, 15);
-				r.attr('fill', '#f00');
-				r.attr('stroke', '#a00');
+				r.attr('fill', fill);
+				r.attr('stroke', stroke);
 			}
 
-			function updateTable(table, values) {
+			function updateTable(table, value, j, scale) {
 				clearTable(table);
-				addRow(table, 'Your Text', values[0]);
-				addRow(table, 'Declaration of Independence', values[1]);
-				addRow(table, 'I have a Dream', values[2]);
+				addRow(table, 'Your Text', value * scale, '#71D0F0', '#3C6F80');
+				for (var i = 0; i < REFERENCES.length; i++) {
+					addRow(table, REFERENCES[i].name, REFERENCES[i].values[j] * scale, '#ddd', '#aaa');
+				}
 			}
 
 			function update(evt) {
@@ -66,19 +74,19 @@
 				}
 
 				var f = flesh_index(ns, nw, nsyl);
-				updateTable('tableFlesch', [f, 5, 5]);
+				updateTable('tableFlesch', f, 0, 2);
 
 				var cl = coleman_liau_index(ns, nw, nl);
-				updateTable('tableColemanLiau', [cl, 5, 5]);
+				updateTable('tableColemanLiau', cl, 1, 15);
 
 				var ari = automated_readability_index(ns, nw, nl);
-				updateTable('tableAutomatedReadability', [ari, 5, 5]);
+				updateTable('tableAutomatedReadability', ari, 2, 15);
 
 				var gf = gunning_fog_index(ns, nw, nc);
-				updateTable('tableGunningFog', [gf, 5, 5]);
+				updateTable('tableGunningFog', gf, 3, 15);
 
 				var smog = smog_grade(ns,nc);
-				updateTable('tableSMOG', [smog, 5, 5]);
+				updateTable('tableSMOG', smog, 4, 15);
 
 				document.getElementById("num_syllables").innerHTML = nsyl;
 				document.getElementById("num_words").innerHTML = nw;
@@ -101,6 +109,7 @@
 				border-style:solid;
 				padding:0.2em;
 				text-align:right;
+				vertical-align:middle;
 			}
 
 			table.diagram td.plot {
