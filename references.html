@@ -22,11 +22,19 @@
 				for (i = 0; i < words.length; i++) {
 					nsyl += count_syllables(words[i]);
 				}
-				var row = "<tr><td> "
-				row += $(this).attr('id')
-				row += " </td><td> "
-				row += smog_grade(ns,nc).toFixed(1)
-				row += " </td></tr>"
+				var row = "<tr><td>";
+				row += $(this).attr('id');
+				row += "</td><td>";
+				row += flesh_index(ns, nw, nsyl).toFixed(1);
+				row += "</td><td>";
+				row += coleman_liau_index(ns, nw, nl).toFixed(1);
+				row += "</td><td>";
+				row += automated_readability_index(ns, nw, nl).toFixed(1);
+				row += "</td><td>";
+				row += gunning_fog_index(ns, nw, nc).toFixed(1);
+				row += "</td><td>";
+				row += smog_grade(ns,nc).toFixed(1);
+				row += " </td></tr>";
 				$('#results').append(row);
 				});
 			});
@@ -546,12 +554,9 @@ Nadine now can’t wait to return to Britain and be reunited with her family. Sh
 “I feel proud of myself for what I achieved there, but I haven’t managed to impress my daughters. They still think I’m a complete wimp.” 
 		</div>
 
-
-		<div id="Table">
-			<table id="results">
-				<tr><th> Name of text </th><th> SMOG Grade </th></tr>
-			</table>
-		</div>
+		<table id="results" border="1">
+			<tr><th>Text</th><th>Flesch</th><th>Coleman-Liau</th><th>ARI</th><th>Gunning-Fog</th><th>SMOG</th></tr>
+		</table>
 		
 	</body>
 </html>
