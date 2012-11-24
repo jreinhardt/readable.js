@@ -32,6 +32,23 @@
 			equal(count_syllables("world"), 1);
 			equal(count_syllables("reproducibility"), 7);
 		});
+
+		test("Checking for suffixes", function() {
+			equal(has_suffix("printed","ed"),true);
+			equal(has_suffix("printed","ted"),true);
+			equal(has_suffix("printed","printed"),true);
+			equal(has_suffix("printed","led"),false);
+			equal(has_suffix("printed","inkjetprinted"),false);
+		});
+
+		test("Check if word is complex", function() {
+			equal(is_complex_word("Hello"),false);
+			equal(is_complex_word("Reproduction"),true);
+			equal(count_syllables("Gravity"),3);
+			equal(is_complex_word("Gravity"),false);
+			equal(count_syllables("Harassment"),3);
+			equal(is_complex_word("Harassment"),true);
+		});
 	</script>
 
 
