@@ -112,30 +112,3 @@ function count_letters(text) {
 	}
 	return nl;
 }
-
-
-function update(evt) {
-	var text = document.form.word.value;
-	var words = split_into_words(text);
-	var sentences = split_into_sentences(text);
-	var ns = sentences.length;
-	var nw = words.length;
-	var nl = count_letters(text);
-	var nsyl = 0;
-	var i;
-	for (i = 0; i < words.length; i++) {
-		nsyl += count_syllables(words[i]);
-	}
-	var f = flesh_index(ns, nw, nsyl);
-	var cl = coleman_liau_index(ns, nw, nl);
-	var ari = automated_readability_index(ns, nw, nl);
-	document.getElementById("num_syllables").innerHTML = nsyl;
-	document.getElementById("num_words").innerHTML = nw;
-	document.getElementById("num_sentences").innerHTML = ns;
-	document.getElementById("num_letters").innerHTML = nl;
-	document.getElementById("flesh").innerHTML = f;
-	document.getElementById("coleman_liau").innerHTML = cl;
-	document.getElementById("ari").innerHTML = ari;
-}
-
-
