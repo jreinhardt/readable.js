@@ -98,14 +98,14 @@ function Text(text){
 		getNumSentences: function(){return memoize("numSentences",countSentences);},
 
 		/*
-		Compute the Flesh readability index.
+		Compute the Flesch readability index.
 
-		Returns the Flesh readability index, a number (usually) between 0
+		Returns the Flesch readability index, a number (usually) between 0
 		and 100, where larger numbers indicate easier text
 
 		https://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
 		*/
-		getFleshKincaidIndex: function() {
+		getFleschKincaidIndex: function() {
 			var wps = this.getNumWords() / this.getNumSentences();
 			var spw = this.getNumSyllables() / this.getNumWords();
 			return 206.835 - 1.015 * wps - 84.6 * spw;
