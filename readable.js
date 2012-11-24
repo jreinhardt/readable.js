@@ -62,9 +62,9 @@ function is_complex_word(word) {
 	}
 	//if word has 3 syllables, it might be simple of complex depending on the
 	//suffix
-	simple_suffixes = new Array("es","ed","ing","ity");
-	for (var suffix in simple_suffixes){
-		if (has_suffix(word,suffix)){
+	suffixes = new Array("es","ed","ing","ity");
+	for (var i=0; i < suffixes.length;i++){
+		if (has_suffix(word,suffixes[i])){
 			return false;
 		}
 	}
