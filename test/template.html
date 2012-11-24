@@ -10,10 +10,17 @@
 	<div id="qunit-fixture"></div>
 	<script src="http://code.jquery.com/qunit/qunit-1.10.0.js"></script>
 	<script>
-    test("a basic test example", function() {
-      var value = "hello";
-      equal(value, "hello", "We expect value to be hello");
-    });
+
+		test("a basic test example", function() {
+			var value = "hello";
+			equal(value, "hello", "We expect value to be hello");
+		});
+
+		test("a second example", function() {
+			var value = "world";
+			equal(value, "world");
+		});
+
 	</script>
 </body>
 </html>
