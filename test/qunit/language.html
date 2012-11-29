@@ -14,22 +14,22 @@
 	<script>
 
 		test("Counting syllables", function() {
-			equal(countSyllables(""), 0);
-			equal(countSyllables("hello"), 2);
-			equal(countSyllables("world"), 1);
-			equal(countSyllables("reproducibility"), 7);
+			equal(readable.countSyllables(""), 0);
+			equal(readable.countSyllables("hello"), 2);
+			equal(readable.countSyllables("world"), 1);
+			equal(readable.countSyllables("reproducibility"), 7);
 		});
 
 		test("Checking for suffixes", function() {
-			equal(hasSuffix("printed","ed"),true);
-			equal(hasSuffix("printed","ted"),true);
-			equal(hasSuffix("printed","printed"),true);
-			equal(hasSuffix("printed","led"),false);
-			equal(hasSuffix("printed","inkjetprinted"),false);
+			equal(readable.hasSuffix("printed","ed"),true);
+			equal(readable.hasSuffix("printed","ted"),true);
+			equal(readable.hasSuffix("printed","printed"),true);
+			equal(readable.hasSuffix("printed","led"),false);
+			equal(readable.hasSuffix("printed","inkjetprinted"),false);
 		});
 
 		test("Text object", function() {
-			var text = Text("Yeah! Bucket the Rocket! Fantastic!");
+			var text = readable.Text("Yeah! Bucket the Rocket! Fantastic!");
 			equal(text.getText(),"Yeah! Bucket the Rocket! Fantastic!");
 			deepEqual(text.getSentences(),["Yeah","Bucket the Rocket","Fantastic"]);
 			deepEqual(text.getSentences(),["Yeah","Bucket the Rocket","Fantastic"]);
@@ -53,49 +53,49 @@
 		});
 
 		test("Check if word is polysyllable", function() {
-			equal(isPolysyllable("Hello"),false);
-			equal(isPolysyllable("Reproduction"),true);
-			equal(countSyllables("Gravity"),3);
-			equal(isPolysyllable("Gravity"),false);
-			equal(countSyllables("Harassment"),3);
-			equal(isPolysyllable("Harassment"),true);
+			equal(readable.isPolysyllable("Hello"),false);
+			equal(readable.isPolysyllable("Reproduction"),true);
+			equal(readable.countSyllables("Gravity"),3);
+			equal(readable.isPolysyllable("Gravity"),false);
+			equal(readable.countSyllables("Harassment"),3);
+			equal(readable.isPolysyllable("Harassment"),true);
 		});
 
 
 		test("Counting letters", function() {
 
 			// Normal letters
-			equal(Text("").getNumLetters(), 0);
-			equal(Text("aEuV").getNumLetters(), 4);
+			equal(readable.Text("").getNumLetters(), 0);
+			equal(readable.Text("aEuV").getNumLetters(), 4);
 
 			// Ignore non-letters
-			equal(Text("a$!.-/\\_;").getNumLetters(), 1);
+			equal(readable.Text("a$!.-/\\_;").getNumLetters(), 1);
 
 			// Funky letters
-			equal(Text("äöüÄÖÜß").getNumLetters(), 6);
+			equal(readable.Text("äöüÄÖÜß").getNumLetters(), 6);
 		});
 
 
 		test("Splitting into words", function() {
-			deepEqual(Text("Hello World").getWords(),["Hello","World"]);
-			deepEqual(Text("Hello   ").getWords(),["Hello"]);
-			deepEqual(Text("Hello   World").getWords(),["Hello","World"]);
-			deepEqual(Text("Hello      World").getWords(),["Hello","World"]);
-			deepEqual(Text("Hello\nWorld").getWords(),["Hello","World"]);
+			deepEqual(readable.Text("Hello World").getWords(),["Hello","World"]);
+			deepEqual(readable.Text("Hello   ").getWords(),["Hello"]);
+			deepEqual(readable.Text("Hello   World").getWords(),["Hello","World"]);
+			deepEqual(readable.Text("Hello      World").getWords(),["Hello","World"]);
+			deepEqual(readable.Text("Hello\nWorld").getWords(),["Hello","World"]);
 		});
 
 
 		test("Splitting into sentences", function() {
-			deepEqual(Text("It was cold outside. The trees were covered in snow.").getSentences(),["It was cold outside","The trees were covered in snow"]);
-			deepEqual(Text("The horror ...").getSentences(),["The horror"]);
-			deepEqual(Text("Did you see her? No I didn't!").getSentences(),["Did you see her","No I didn't"]);
-			deepEqual(Text("WTF??!!??").getSentences(),["WTF"]);
+			deepEqual(readable.Text("It was cold outside. The trees were covered in snow.").getSentences(),["It was cold outside","The trees were covered in snow"]);
+			deepEqual(readable.Text("The horror ...").getSentences(),["The horror"]);
+			deepEqual(readable.Text("Did you see her? No I didn't!").getSentences(),["Did you see her","No I didn't"]);
+			deepEqual(readable.Text("WTF??!!??").getSentences(),["WTF"]);
 		});
 
 
 		test("Count complex words", function() {
-			equal(Text("Hallo").getNumPolysyllables(),0);
-			equal(Text("Hello Mister representive").getNumPolysyllables(),1);
+			equal(readable.Text("Hallo").getNumPolysyllables(),0);
+			equal(readable.Text("Hello Mister representive").getNumPolysyllables(),1);
 		});
 
 	</script>
