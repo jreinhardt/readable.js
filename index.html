@@ -46,7 +46,7 @@
 				$(td2).addClass('plot');
 				tr.appendChild(td2);
 				var p = Raphael(td2, 300, 16);
-				var r = p.rect(.5, .5, value, 15);
+				var r = p.rect(.5, .5, Math.max(value, 5), 15);
 				r.attr('fill', fill);
 				r.attr('stroke', stroke);
 			}
