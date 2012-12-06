@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8"/>
 		<script src="http://code.jquery.com/jquery-1.8.3.min.js" type="text/javascript"></script>
-		<script src="raphael-2.1.0-min.js" type="text/javascript"></script>
 		<script src="readable.js" type="text/javascript"></script>
+		<script src="http://d3js.org/d3.v2.js"></script>
 
 		<script type="text/javascript">
 
@@ -17,12 +17,57 @@
 			]
 
 			/*
+			idx is the index into the values array of References
+			*/
+			var metrics = [{name: 'FleschKincaid', idx: 0, scale: 2,
+					score: function(text) {return text.getFleschKincaidIndex()}, 
+					descr: "The Flesch Reading Ease test depends on the number of words per sentence and the number of syllables per word. Higher values indicate a better readability.",
+					link: "http://en.wikipedia.org/wiki/Flesch–Kincaid_Readability_Test"},
+				{name: 'ColemanLiau', idx: 1, scale: 15,
+					score: function(text) {return text.getColemanLiauIndex()},
+					descr: "The Coleman-Liau index depends on the length of the words and the number of words per sentence. Lower values indicate a better readability.",
+					link: "http://en.wikipedia.org/wiki/Coleman-Liau_index"},
+				{name: 'AutomatedReadability', idx: 2, scale: 15,
+					score: function(text) {return text.getAutomatedReadabilityIndex()},
+					descr: "The Automated Readability Index depends on length of the words and the number of words per sentence. Lower values indicate a better readability.",
+					link: "http://en.wikipedia.org/wiki/Automated_Readability_Index"},
+				{name: 'GunningFog', idx: 3, scale: 15,
+					score: function(text) {return text.getGunningFogIndex()},
+					descr: "The Gunning-Fog index depends on the number of words per sentence and the number of complex words. Lower values indicate a better readability.",
+					link: "http://en.wikipedia.org/wiki/Gunning-Fog_Index"},
+				{name: 'SMOG', idx: 4, scale: 15,
+					score: function(text) {return text.getSmogGrade()},
+					descr: "The SMOG grade depends on the number of complex words per sentence. Lower values indicate a better readability.",
+					link: "http://en.wikipedia.org/wiki/SMOG"}
+			];
+			/*
 			Auto-update with typing time-out.
 			*/
 			var autoUpdateTimer;
 			var AUTO_UPDATE_TIMEOUT = 500; // in ms
 
 			$(document).ready(function() {
+				for(var i=0;i<metrics.length;i++){
+					data = [{name: "Your Text", value: 1}];
+					for (var j = 0; j < REFERENCES.length; j++) {
+						data[data.length] = {name: REFERENCES[j].name, value: 1};
+					}
+					d3.select('#results').append("div").attr('id',metrics[i].name).append("h2").html(metrics[i].name);
+					d3.select('#' + metrics[i].name).append('div').html(metrics[i].descr)
+					var chart = d3.select('#' + metrics[i].name).append("svg").attr("height",(REFERENCES.length+1)*20).attr("width",600).attr("class","chart");
+					
+					chart.selectAll("rect").data(data)
+						.enter().append("rect")
+						.attr("x", function(d,i) {return 0})
+						.attr("y", function(d,i) {return 20*i})
+						.attr("width", function(d,i) {return d.value})
+						.attr("height", function(d,i) {return 18})
+					chart.selectAll("text").data(data)
+						.enter().append("text")
+						.attr("x", function(d,i) {return 600})
+						.attr("y", function(d,i) {return 20*(i+1)-2})
+						.attr("text-anchor","end").text(function(d,i) {return d.name});
+				}
 				$('#text').on('input paste', function() {
 					clearTimeout(autoUpdateTimer);
 					if ($('#text').val) {
@@ -31,47 +76,34 @@
 				});
 			});
 
-			function clearTable(table) {
-				document.getElementById(table).innerHTML = '';
-			}
-
-			function addRow(table, label, value, fill, stroke) {
-				var tr = document.createElement('tr');
-				document.getElementById(table).appendChild(tr);
-				var td1 = document.createElement('td');
-				tr.appendChild(td1);
-				$(td1).addClass('label');
-				td1.innerHTML = label;
-				var td2 = document.createElement('td');
-				$(td2).addClass('plot');
-				tr.appendChild(td2);
-				var p = Raphael(td2, 300, 16);
-				var r = p.rect(.5, .5, Math.max(value, 5), 15);
-				r.attr('fill', fill);
-				r.attr('stroke', stroke);
-			}
-
 			function updateTable(table, value, j, scale) {
-				clearTable(table);
-				addRow(table, 'Your Text', value * scale, '#71D0F0', '#3C6F80');
+				data = [{name: "Your Text", value: value}];
 				for (var i = 0; i < REFERENCES.length; i++) {
-					addRow(table, REFERENCES[i].name, REFERENCES[i].values[j] * scale, '#ddd', '#aaa');
+					data[data.length] = {name: REFERENCES[i].name, value: REFERENCES[i].values[j]};
 				}
+
+				var chart = d3.select('#' + table).select("svg")
+				chart.selectAll("rect").data(data)
+					.transition().duration(500)
+					.attr("x", function(d,i) {return 0})
+					.attr("y", function(d,i) {return 20*i})
+					.attr("width", function(d,i) {return Math.max(1,d.value*scale)})
+					.attr("height", function(d,i) {return 18})
+				chart.selectAll("text").data(data)
+					.attr("x", function(d,i) {return 600})
+					.attr("y", function(d,i) {return 20*(i+1)-2})
+					.attr("text-anchor","end").text(function(d,i) {return d.name});
 			}
 
 			function update(evt) {
 				var text = Text(document.form.text.value);
-				updateTable('tableFlesch', text.getFleschKincaidIndex(), 0, 2);
-				updateTable('tableColemanLiau', text.getColemanLiauIndex(), 1, 15);
-				updateTable('tableAutomatedReadability', text.getAutomatedReadabilityIndex(), 2, 15);
-				updateTable('tableGunningFog', text.getGunningFogIndex(), 3, 15);
-				updateTable('tableSMOG', text.getSmogGrade(), 4, 15);
+				for (var i=0;i<metrics.length;i++){
+					updateTable(metrics[i].name, metrics[i].score(text), metrics[i].idx, metrics[i].scale);
+				}
 
-				$('#results').show();
 			}
 
 		</script>
-
 
 		<style type="text/css">
 
@@ -80,29 +112,37 @@
 				margin:0 auto 0 auto;
 			}
 
-			/* Styles for bar chars */
-			table.diagram {
-				border-collapse:collapse;
+			svg.chart rect{
+				stroke: white;
+				fill: steelblue;
 			}
 
-			table.diagram td.label {
-				border-width:0 2px 0 0;
-				border-color:#aaa;
-				border-style:solid;
-				padding:0.2em;
-				text-align:right;
-				vertical-align:middle;
+			svg.chart text{
+				fill: black;
 			}
 
-			table.diagram td.plot {
-				padding:0.2em;
+			#content div h2 {
+				position:relative;
+				color: steelblue;
 			}
+			#content div h2 span {
+				display: none;
+			}
+
+			#content div h2:hover span {
+				font-size: 0.6em;
+				display: block;
+				position: absolute;
+				background-color: white;
+				color: black;
+			}
+
 		</style>
 	</head>
 
 	<body>
 
-		<div id="content" style="display:none;">
+		<div id="content">
 
 			<h1>readable.js</h1>
 
@@ -116,38 +156,7 @@
 				<textarea name="text" id="text" cols="80" rows="10"></textarea>
 			</form>
 
-			<div id="results" style="display:none;">
-				<h2>Flesch Reading Ease</h2>
-				<p>The Flesch Reading Ease test depends on the number of words per
-				sentence and the number of syllables per word. Higher values indicate
-				a better readability.
-				<a href="http://en.wikipedia.org/wiki/Flesch–Kincaid_Readability_Test">Read more</a>.</p>
-				<table id="tableFlesch" class="diagram"></table>
-
-				<h2>Coleman-Liau Index</h2>
-				<p>The Coleman-Liau index depends on the length of the words and the
-				number of words per sentence. Lower values indicate a better readability.
-				<a href="http://en.wikipedia.org/wiki/Coleman-Liau_index">Read more</a>.</p>
-				<table id="tableColemanLiau" class="diagram"></table>
-
-				<h2>Automated Readability Index</h2>
-				<p>The Automated Readability Index depends on length of the words and
-				the number of words per sentence. Lower values indicate a better readability.
-				<a href="http://en.wikipedia.org/wiki/Automated_Readability_Index">Read more</a>.</p>
-				<table id="tableAutomatedReadability" class="diagram"></table>
-
-				<h2>Gunning-Fog Index</h2>
-				<p>The Gunning-Fog index depends on the number of words per sentence and
-				the number of complex words. Lower values indicate a better readability.
-				<a href="http://en.wikipedia.org/wiki/Gunning-Fog_Index">Read more</a>.</p>
-				<table id="tableGunningFog" class="diagram"></table>
-
-				<h2>SMOG Grade</h2>
-				<p>The SMOG grade depends on the number of complex words per sentence.
-				Lower values indicate a better readability.
-				<a href="http://en.wikipedia.org/wiki/SMOG">Read more</a>.</p>
-				<table id="tableSMOG" class="diagram"></table>
-			</div>
+			<div id="results"></div>
 		</div>
 
 		<!-- Javascript support check -->
