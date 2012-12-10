@@ -19,10 +19,10 @@
 			/*
 			idx is the index into the values array of References
 			*/
-			var metrics = [{name: 'FleschKincaid', idx: 0, scale: 2,
+			var metrics = [/*{name: 'FleschKincaid', idx: 0, scale: 2,
 					score: function(text) {return text.getFleschKincaidIndex()}, 
 					descr: "The Flesch Reading Ease test depends on the number of words per sentence and the number of syllables per word. Higher values indicate a better readability.",
-					link: "http://en.wikipedia.org/wiki/Flesch–Kincaid_Readability_Test"},
+					link: "http://en.wikipedia.org/wiki/Flesch–Kincaid_Readability_Test"},*/
 				{name: 'ColemanLiau', idx: 1, scale: 15,
 					score: function(text) {return text.getColemanLiauIndex()},
 					descr: "The Coleman-Liau index depends on the length of the words and the number of words per sentence. Lower values indicate a better readability.",
@@ -45,29 +45,107 @@
 			*/
 			var autoUpdateTimer;
 			var AUTO_UPDATE_TIMEOUT = 500; // in ms
+			var data;
+
+			/* Find the idx for entry for a text in data from the texts name */
+			function findIdx(data,name){
+				for(var i=0;i<data.length;i++){
+					if(data[i].name == name){
+						return i;
+					}
+				}
+				return -1;
+			}
+
+			function compareTexts(a,b) {
+				if(a.minValue < b.minValue){
+					return -1;
+				}
+				if(a.minValue > b.minValue){
+					return 1;
+				}
+				return 0;
+			}
+
+			function setup_data(){
+				data = [{name: "Your Text", minValue: 0, minMetric:"None", maxValue: 0, maxMetric: "None"}];
+				for (var j = 0; j < REFERENCES.length; j++) {
+					var ref_data = {name: REFERENCES[j].name,
+						 minValue: REFERENCES[j].values[metrics[0].idx], minMetric: metrics[0].name,
+						 maxValue: REFERENCES[j].values[metrics[0].idx], maxMetric: metrics[0].name};
+					for(var i=1;i<metrics.length;i++){
+						if(ref_data.minValue > REFERENCES[j].values[metrics[i].idx]){
+							ref_data.minValue = REFERENCES[j].values[metrics[i].idx];
+							ref_data.minMetric = metrics[i].name;
+						}
+						if(ref_data.maxValue < REFERENCES[j].values[metrics[i].idx]){
+							ref_data.maxValue = REFERENCES[j].values[metrics[i].idx];
+							ref_data.maxMetric = metrics[i].name;
+						}
+					}
+					data.push(ref_data);
+				}
+				return data;
+			}
 
 			$(document).ready(function() {
-				for(var i=0;i<metrics.length;i++){
-					data = [{name: "Your Text", value: 1}];
-					for (var j = 0; j < REFERENCES.length; j++) {
-						data[data.length] = {name: REFERENCES[j].name, value: 1};
-					}
-					d3.select('#results').append("div").attr('id',metrics[i].name).append("h2").html(metrics[i].name);
-					d3.select('#' + metrics[i].name).append('div').html(metrics[i].descr)
-					var chart = d3.select('#' + metrics[i].name).append("svg").attr("height",(REFERENCES.length+1)*20).attr("width",600).attr("class","chart");
-					
-					chart.selectAll("rect").data(data)
-						.enter().append("rect")
-						.attr("x", function(d,i) {return 0})
-						.attr("y", function(d,i) {return 20*i})
-						.attr("width", function(d,i) {return d.value})
-						.attr("height", function(d,i) {return 18})
-					chart.selectAll("text").data(data)
-						.enter().append("text")
-						.attr("x", function(d,i) {return 600})
-						.attr("y", function(d,i) {return 20*(i+1)-2})
-						.attr("text-anchor","end").text(function(d,i) {return d.name});
-				}
+
+				//Prepare Description
+				var legend = d3.selectAll('#legend');
+				legend.selectAll("div").data(metrics).enter().append("div").attr("class","description");
+				legend.selectAll("div.description").data(metrics).append("h2").text(function(d,i){return d.name;});
+				legend.selectAll("div.description").data(metrics).append("div").text(function(d,i){return d.descr;});
+
+				//Prepare chart
+				var chart = d3.select('#results').append("svg").attr("height",(REFERENCES.length+1)*20).attr("width",600).attr("class","chart");
+				data = setup_data();
+
+				data.sort(compareTexts);
+
+				chart.selectAll("rect.maxValue").data(data, function(d){return d.name;})
+					.enter().append("rect")
+					.attr("class","maxValue")
+					.attr("x", function(d,i) {return 0})
+					.attr("y", function(d,i) {return 20*i})
+					.attr("width", function(d,i) {return  Math.max(1,d.maxValue*15)})
+					.attr("height", function(d,i) {return 18});
+
+				chart.selectAll("text.maxValue").data(data, function(d){return d.name;})
+					.enter().append("text")
+					.attr("class","maxValue")
+					.attr("x", function(d,i) {return Math.max(1,d.maxValue*15)})
+					.attr("y", function(d,i) {return 20*i})
+					.attr("dx", -3) // padding-right
+					.attr("dy", ".85em") // vertical-align: middle
+					.attr("text-anchor","end")
+					.text(function(d,i) {return d.maxMetric[0]});
+
+				chart.selectAll("rect.minValue").data(data, function(d){return d.name;})
+					.enter().append("rect")
+					.attr("class","minValue")
+					.attr("x", function(d,i) {return 0})
+					.attr("y", function(d,i) {return 20*i})
+					.attr("width", function(d,i) {return  Math.max(1,d.minValue*15)})
+					.attr("height", function(d,i) {return 18});
+
+				chart.selectAll("text.minValue").data(data, function(d){return d.name;})
+					.enter().append("text")
+					.attr("class","minValue")
+					.attr("x", function(d,i) {return Math.max(1,d.minValue*15)})
+					.attr("y", function(d,i) {return 20*i})
+					.attr("dx", -3) // padding-right
+					.attr("dy", ".85em") // vertical-align: middle
+					.attr("text-anchor","end")
+					.text(function(d,i) {return d.minMetric[0]});
+
+				chart.selectAll("text.label").data(data)
+					.enter().append("text")
+					.attr("class","label")
+					.attr("x", function(d,i) {return 600})
+					.attr("y", function(d,i) {return 20*(i+1)-2})
+					.attr("text-anchor","end").text(function(d,i) {return d.name});
+
+				//Prepare update timer
 				$('#text').on('input paste', function() {
 					clearTimeout(autoUpdateTimer);
 					if ($('#text').val) {
@@ -76,31 +154,57 @@
 				});
 			});
 
-			function updateTable(table, value, j, scale) {
-				data = [{name: "Your Text", value: value}];
-				for (var i = 0; i < REFERENCES.length; i++) {
-					data[data.length] = {name: REFERENCES[i].name, value: REFERENCES[i].values[j]};
+			function update(evt) {
+				var text = Text(document.form.text.value);
+				var myText = data[findIdx(data,"Your Text")];
+				myText.minValue = metrics[0].score(text);
+				myText.minMetric = metrics[0].name;
+				myText.maxValue = metrics[0].score(text);
+				myText.maxMetric = metrics[0].name;
+				for(var i=1;i<metrics.length;i++){
+					if(myText.minValue > metrics[i].score(text)){
+						myText.minValue = metrics[i].score(text);
+						myText.minMetric = metrics[i].name;
+					}
+					if(myText.maxValue < metrics[i].score(text)){
+						myText.maxValue = metrics[i].score(text);
+						myText.maxMetric = metrics[i].name;
+					}
 				}
 
-				var chart = d3.select('#' + table).select("svg")
-				chart.selectAll("rect").data(data)
+				data.sort(compareTexts);
+
+				var chart = d3.select('#results').select("svg")
+				//Max Value boxes
+				chart.selectAll("rect.maxValue").data(data, function(d){return d.name;})
 					.transition().duration(500)
-					.attr("x", function(d,i) {return 0})
 					.attr("y", function(d,i) {return 20*i})
-					.attr("width", function(d,i) {return Math.max(1,d.value*scale)})
-					.attr("height", function(d,i) {return 18})
-				chart.selectAll("text").data(data)
+					.attr("width", function(d,i) {return Math.max(1,d.maxValue*15)})
+					.attr("height", function(d,i) {return 18});
+				//Max Value metric name
+				chart.selectAll("text.maxValue").data(data, function(d){return d.name;})
+					.transition().duration(500)
+					.attr("x", function(d,i) {return Math.max(1,d.maxValue*15)})
+					.attr("y", function(d,i) {return 20*i})
+					.attr("text-anchor","end").text(function(d,i) {return d.maxMetric[0]});
+				//Min Value boxes
+				chart.selectAll("rect.minValue").data(data, function(d){return d.name;})
+					.transition().duration(500)
+					.attr("y", function(d,i) {return 20*i})
+					.attr("width", function(d,i) {return Math.max(1,d.minValue*15)})
+					.attr("height", function(d,i) {return 18});
+				//Min Value metric name
+				chart.selectAll("text.minValue").data(data, function(d){return d.name;})
+					.transition().duration(500)
+					.attr("x", function(d,i) {return Math.max(1,d.minValue*15)})
+					.attr("y", function(d,i) {return 20*i})
+					.attr("text-anchor","end").text(function(d,i) {return d.minMetric[0]});
+				//Text name
+				chart.selectAll("text.label").data(data, function(d){return d.name;})
+					.transition().duration(500)
 					.attr("x", function(d,i) {return 600})
 					.attr("y", function(d,i) {return 20*(i+1)-2})
 					.attr("text-anchor","end").text(function(d,i) {return d.name});
-			}
-
-			function update(evt) {
-				var text = Text(document.form.text.value);
-				for (var i=0;i<metrics.length;i++){
-					updateTable(metrics[i].name, metrics[i].score(text), metrics[i].idx, metrics[i].scale);
-				}
-
 			}
 
 		</script>
@@ -112,9 +216,14 @@
 				margin:0 auto 0 auto;
 			}
 
-			svg.chart rect{
+			svg.chart rect.minValue{
 				stroke: white;
 				fill: steelblue;
+			}
+
+			svg.chart rect.maxValue{
+				stroke: white;
+				fill: lightblue;
 			}
 
 			svg.chart text{
@@ -157,6 +266,7 @@
 			</form>
 
 			<div id="results"></div>
+			<div id="legend"></div>
 		</div>
 
 		<!-- Javascript support check -->
