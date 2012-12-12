@@ -152,26 +152,14 @@
 
 				var chart = d3.select('#results').select("svg")
 
-				//TODO: Scope issues
-				chart.selectAll("rect."+metrics[0].name).data(data, function(d){return d.name;})
-					.transition().duration(500)
-					.attr("x", function(d,i) {return  Math.max(1,d.grades[0]*20)})
-					.attr("y", function(d,i) {return 20*i});
-
-				chart.selectAll("rect."+metrics[1].name).data(data, function(d){return d.name;})
-					.transition().duration(500)
-					.attr("x", function(d,i) {return  Math.max(1,d.grades[1]*20)})
-					.attr("y", function(d,i) {return 20*i});
-
-				chart.selectAll("rect."+metrics[2].name).data(data, function(d){return d.name;})
-					.transition().duration(500)
-					.attr("x", function(d,i) {return  Math.max(1,d.grades[2]*20)})
-					.attr("y", function(d,i) {return 20*i});
-
-				chart.selectAll("rect."+metrics[3].name).data(data, function(d){return d.name;})
-					.transition().duration(500)
-					.attr("x", function(d,i) {return  Math.max(1,d.grades[3]*20)})
-					.attr("y", function(d,i) {return 20*i});
+				for(var j=0;j<metrics.length;j++){
+					(function(j){
+						chart.selectAll("rect."+metrics[j].name).data(data, function(d){return d.name;})
+							.transition().duration(500)
+							.attr("x", function(d,i) {return  Math.max(1,d.grades[j]*20)})
+							.attr("y", function(d,i) {return 20*i});
+					})(j);
+				}
 
 				//Text name
 				chart.selectAll("text.label").data(data, function(d){return d.name;})
