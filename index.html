@@ -8,34 +8,47 @@
 
 		<script type="text/javascript">
 
-			REFERENCES = [
-				{name: 'Declaration of Independence', values: [48.1, 12.0, 13.9, 14.9, 13.3]},
-				{name: 'Alice in Wonderland', values: [80.8, 5.7, 6.0, 8.6, 7.7]},
-				{name: 'I have a Dream', values: [67.7, 8.0, 8.3, 11.2, 10.6]},
-				{name: 'Critique of pure Reason', values: [47.8, 11.7, 12.8, 14.6, 13.3]},
-				{name: 'Typical "The Sun" Article', values: [78.1, 6.7, 5.0, 8.0, 8.5]}
-			]
+			function TextInfo(name,grades){
+				var res = {};
+				res.name = name;
+				if(grades === undefined){
+					res.grades = Array(metrics.length);
+				} else {
+					res.grades = grades;
+				}
+				res.getMaximumGrade = function(){return Math.max.apply(res.grades)/res.grades.length;};
+				res.getMinimumGrade = function(){return Math.min.apply(res.grades)/res.grades.length;};
+				res.getAverageGrade = function(){return res.grades.reduce(function(a,b){return a+b;},0)/res.grades.length;};
+				return res;
+			};
 
-			/*
-			idx is the index into the values array of References
-			*/
-			var metrics = [/*{name: 'FleschKincaid', idx: 0, scale: 2,
-					score: function(text) {return text.getFleschKincaidIndex()}, 
-					descr: "The Flesch Reading Ease test depends on the number of words per sentence and the number of syllables per word. Higher values indicate a better readability.",
-					link: "http://en.wikipedia.org/wiki/Flesch–Kincaid_Readability_Test"},*/
-				{name: 'ColemanLiau', idx: 1, scale: 15,
+			REFERENCES = [
+				TextInfo('Declaration of Independence',[12.0, 13.9, 14.9, 13.3]),
+				TextInfo('Alice in Wonderland', [5.7, 6.0, 8.6, 7.7]),
+				TextInfo('I have a Dream', [8.0, 8.3, 11.2, 10.6]),
+				TextInfo('Critique of pure Reason', [11.7, 12.8, 14.6, 13.3]),
+				TextInfo('Typical "The Sun" Article', [6.7, 5.0, 8.0, 8.5])
+			];
+
+			SCALE = [
+				{at: 3, name: "easy"},
+				{at: 17, name: "difficult"}
+			];
+
+			var metrics = [
+				{name: 'ColemanLiau',
 					score: function(text) {return text.getColemanLiauIndex()},
 					descr: "The Coleman-Liau index depends on the length of the words and the number of words per sentence. Lower values indicate a better readability.",
 					link: "http://en.wikipedia.org/wiki/Coleman-Liau_index"},
-				{name: 'AutomatedReadability', idx: 2, scale: 15,
+				{name: 'AutomatedReadability',
 					score: function(text) {return text.getAutomatedReadabilityIndex()},
 					descr: "The Automated Readability Index depends on length of the words and the number of words per sentence. Lower values indicate a better readability.",
 					link: "http://en.wikipedia.org/wiki/Automated_Readability_Index"},
-				{name: 'GunningFog', idx: 3, scale: 15,
+				{name: 'GunningFog',
 					score: function(text) {return text.getGunningFogIndex()},
 					descr: "The Gunning-Fog index depends on the number of words per sentence and the number of complex words. Lower values indicate a better readability.",
 					link: "http://en.wikipedia.org/wiki/Gunning-Fog_Index"},
-				{name: 'SMOG', idx: 4, scale: 15,
+				{name: 'SMOG',
 					score: function(text) {return text.getSmogGrade()},
 					descr: "The SMOG grade depends on the number of complex words per sentence. Lower values indicate a better readability.",
 					link: "http://en.wikipedia.org/wiki/SMOG"}
@@ -58,34 +71,10 @@
 			}
 
 			function compareTexts(a,b) {
-				if(a.minValue < b.minValue){
+				if(a.getAverageGrade() < b.getAverageGrade()){
 					return -1;
 				}
-				if(a.minValue > b.minValue){
-					return 1;
-				}
-				return 0;
-			}
-
-			function setup_data(){
-				data = [{name: "Your Text", minValue: 0, minMetric:"None", maxValue: 0, maxMetric: "None"}];
-				for (var j = 0; j < REFERENCES.length; j++) {
-					var ref_data = {name: REFERENCES[j].name,
-						 minValue: REFERENCES[j].values[metrics[0].idx], minMetric: metrics[0].name,
-						 maxValue: REFERENCES[j].values[metrics[0].idx], maxMetric: metrics[0].name};
-					for(var i=1;i<metrics.length;i++){
-						if(ref_data.minValue > REFERENCES[j].values[metrics[i].idx]){
-							ref_data.minValue = REFERENCES[j].values[metrics[i].idx];
-							ref_data.minMetric = metrics[i].name;
-						}
-						if(ref_data.maxValue < REFERENCES[j].values[metrics[i].idx]){
-							ref_data.maxValue = REFERENCES[j].values[metrics[i].idx];
-							ref_data.maxMetric = metrics[i].name;
-						}
-					}
-					data.push(ref_data);
-				}
-				return data;
+				return 1;
 			}
 
 			$(document).ready(function() {
@@ -93,57 +82,48 @@
 				//Prepare Description
 				var legend = d3.selectAll('#legend');
 				legend.selectAll("div").data(metrics).enter().append("div").attr("class","description");
-				legend.selectAll("div.description").data(metrics).append("h2").text(function(d,i){return d.name;});
-				legend.selectAll("div.description").data(metrics).append("div").text(function(d,i){return d.descr;});
+				legend.selectAll("div.description").data(metrics)
+					.append("h2")
+					.attr("class",function(d,i){return d.name;})
+					.text(function(d,i){return d.name;});
+				legend.selectAll("div.description").data(metrics)
+					.append("div")
+					.text(function(d,i){return d.descr;});
+				legend.selectAll("div.description").data(metrics)
+					.append("a")
+					.attr("href",function(d,i){return d.link;})
+					.text("Read more");
 
 				//Prepare chart
-				var chart = d3.select('#results').append("svg").attr("height",(REFERENCES.length+1)*20).attr("width",600).attr("class","chart");
-				data = setup_data();
+				var chart = d3.select('#results').append("svg").attr("height",(REFERENCES.length+3)*20).attr("width",600).attr("class","chart");
 
+				data = REFERENCES.concat([TextInfo("Your Text",[0,0,0,0])]);
 				data.sort(compareTexts);
 
-				chart.selectAll("rect.maxValue").data(data, function(d){return d.name;})
-					.enter().append("rect")
-					.attr("class","maxValue")
-					.attr("x", function(d,i) {return 0})
-					.attr("y", function(d,i) {return 20*i})
-					.attr("width", function(d,i) {return  Math.max(1,d.maxValue*15)})
-					.attr("height", function(d,i) {return 18});
-
-				chart.selectAll("text.maxValue").data(data, function(d){return d.name;})
-					.enter().append("text")
-					.attr("class","maxValue")
-					.attr("x", function(d,i) {return Math.max(1,d.maxValue*15)})
-					.attr("y", function(d,i) {return 20*i})
-					.attr("dx", -3) // padding-right
-					.attr("dy", ".85em") // vertical-align: middle
-					.attr("text-anchor","end")
-					.text(function(d,i) {return d.maxMetric[0]});
-
-				chart.selectAll("rect.minValue").data(data, function(d){return d.name;})
-					.enter().append("rect")
-					.attr("class","minValue")
-					.attr("x", function(d,i) {return 0})
-					.attr("y", function(d,i) {return 20*i})
-					.attr("width", function(d,i) {return  Math.max(1,d.minValue*15)})
-					.attr("height", function(d,i) {return 18});
-
-				chart.selectAll("text.minValue").data(data, function(d){return d.name;})
-					.enter().append("text")
-					.attr("class","minValue")
-					.attr("x", function(d,i) {return Math.max(1,d.minValue*15)})
-					.attr("y", function(d,i) {return 20*i})
-					.attr("dx", -3) // padding-right
-					.attr("dy", ".85em") // vertical-align: middle
-					.attr("text-anchor","end")
-					.text(function(d,i) {return d.minMetric[0]});
-
+				for(var j=0;j<metrics.length;j++){
+					chart.selectAll("rect."+metrics[j].name).data(data, function(d){return d.name;})
+						.enter().append("rect")
+						.attr("class",metrics[j].name)
+						.attr("x", function(d,i) {return  Math.max(1,d.grades[j]*20)})
+						.attr("y", function(d,i) {return 20*i})
+						.attr("width", function(d,i) {return 4})
+						.attr("height", function(d,i) {return 18});
+				}
+				//Text name
 				chart.selectAll("text.label").data(data)
 					.enter().append("text")
 					.attr("class","label")
 					.attr("x", function(d,i) {return 600})
 					.attr("y", function(d,i) {return 20*(i+1)-2})
 					.attr("text-anchor","end").text(function(d,i) {return d.name});
+
+				//Scale
+				chart.selectAll("text.scale").data(SCALE)
+					.enter().append("text")
+					.attr("class","scale")
+					.attr("x", function(d,i) {return 20*d.at;})
+					.attr("y", function(d,i) {return 150})
+					.attr("text-anchor","middle").text(function(d,i) {return d.name});
 
 				//Prepare update timer
 				$('#text').on('input paste', function() {
@@ -155,50 +135,44 @@
 			});
 
 			function update(evt) {
-				var text = Text(document.form.text.value);
-				var myText = data[findIdx(data,"Your Text")];
-				myText.minValue = metrics[0].score(text);
-				myText.minMetric = metrics[0].name;
-				myText.maxValue = metrics[0].score(text);
-				myText.maxMetric = metrics[0].name;
-				for(var i=1;i<metrics.length;i++){
-					if(myText.minValue > metrics[i].score(text)){
-						myText.minValue = metrics[i].score(text);
-						myText.minMetric = metrics[i].name;
+				var grades = Array(metrics.length);
+				if(document.form.text.value.length === 0){
+					for(var i=0;i<metrics.length;i++){
+						grades[i] = 0;
 					}
-					if(myText.maxValue < metrics[i].score(text)){
-						myText.maxValue = metrics[i].score(text);
-						myText.maxMetric = metrics[i].name;
+				} else {
+					var text = Text(document.form.text.value);
+					for(var i=0;i<metrics.length;i++){
+						grades[i] = metrics[i].score(text);
 					}
 				}
+				data = REFERENCES.concat([TextInfo("Your Text",grades)]);
 
 				data.sort(compareTexts);
 
 				var chart = d3.select('#results').select("svg")
-				//Max Value boxes
-				chart.selectAll("rect.maxValue").data(data, function(d){return d.name;})
+
+				//TODO: Scope issues
+				chart.selectAll("rect."+metrics[0].name).data(data, function(d){return d.name;})
 					.transition().duration(500)
-					.attr("y", function(d,i) {return 20*i})
-					.attr("width", function(d,i) {return Math.max(1,d.maxValue*15)})
-					.attr("height", function(d,i) {return 18});
-				//Max Value metric name
-				chart.selectAll("text.maxValue").data(data, function(d){return d.name;})
+					.attr("x", function(d,i) {return  Math.max(1,d.grades[0]*20)})
+					.attr("y", function(d,i) {return 20*i});
+
+				chart.selectAll("rect."+metrics[1].name).data(data, function(d){return d.name;})
 					.transition().duration(500)
-					.attr("x", function(d,i) {return Math.max(1,d.maxValue*15)})
-					.attr("y", function(d,i) {return 20*i})
-					.attr("text-anchor","end").text(function(d,i) {return d.maxMetric[0]});
-				//Min Value boxes
-				chart.selectAll("rect.minValue").data(data, function(d){return d.name;})
+					.attr("x", function(d,i) {return  Math.max(1,d.grades[1]*20)})
+					.attr("y", function(d,i) {return 20*i});
+
+				chart.selectAll("rect."+metrics[2].name).data(data, function(d){return d.name;})
 					.transition().duration(500)
-					.attr("y", function(d,i) {return 20*i})
-					.attr("width", function(d,i) {return Math.max(1,d.minValue*15)})
-					.attr("height", function(d,i) {return 18});
-				//Min Value metric name
-				chart.selectAll("text.minValue").data(data, function(d){return d.name;})
+					.attr("x", function(d,i) {return  Math.max(1,d.grades[2]*20)})
+					.attr("y", function(d,i) {return 20*i});
+
+				chart.selectAll("rect."+metrics[3].name).data(data, function(d){return d.name;})
 					.transition().duration(500)
-					.attr("x", function(d,i) {return Math.max(1,d.minValue*15)})
-					.attr("y", function(d,i) {return 20*i})
-					.attr("text-anchor","end").text(function(d,i) {return d.minMetric[0]});
+					.attr("x", function(d,i) {return  Math.max(1,d.grades[3]*20)})
+					.attr("y", function(d,i) {return 20*i});
+
 				//Text name
 				chart.selectAll("text.label").data(data, function(d){return d.name;})
 					.transition().duration(500)
@@ -216,36 +190,37 @@
 				margin:0 auto 0 auto;
 			}
 
-			svg.chart rect.minValue{
-				stroke: white;
-				fill: steelblue;
+			.ColemanLiau{
+				stroke: #5F18A5;
+				fill: #5F18A5;
+				color: #5F18A5;
 			}
 
-			svg.chart rect.maxValue{
-				stroke: white;
-				fill: lightblue;
+			.SMOG{
+				stroke: #E72621;
+				fill: #E72621;
+				color: #E72621;
+			}
+
+			.AutomatedReadability{
+				stroke: #F6811B;
+				fill: #F6811B;
+				color: #F6811B;
+			}
+
+			.GunningFog{
+				stroke: #4ED8F8;
+				fill: #4ED8F8;
+				color: #4ED8F8;
 			}
 
 			svg.chart text{
 				fill: black;
 			}
 
-			#content div h2 {
-				position:relative;
-				color: steelblue;
+			svg.chart rect{
+				opacity: 0.5;
 			}
-			#content div h2 span {
-				display: none;
-			}
-
-			#content div h2:hover span {
-				font-size: 0.6em;
-				display: block;
-				position: absolute;
-				background-color: white;
-				color: black;
-			}
-
 		</style>
 	</head>
 
