@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Tests for the various metrics</title>
+	<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.10.0.css">
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="http://code.jquery.com/qunit/qunit-1.10.0.js"></script>
+
+	<script src="../../readable.js"></script>
+	<script src="../../simple-metrics.js"></script>
+	<script>
+
+		function checkInterface(metric){
+			var text = readable.Text("Hello World. Testing is nice, isn't it");
+
+			//Check the prototype chain for the MetricPrototype
+			var proto = Object.getPrototypeOf(metric);
+			while(proto !== readable.MetricPrototype && proto !== undefined){
+				proto = Object.getPrototypeOf(proto);
+			}
+			deepEqual(proto,readable.MetricPrototype);
+
+			//Check the interface and return types
+			deepEqual(typeof(metric.getName()),'string');
+			ok(metric.getName().length > 0);
+			deepEqual(typeof(metric.getDescription()),'string');
+			ok(metric.getDescription().length > 0);
+			deepEqual(typeof(metric.getReference()),'string');
+			deepEqual(typeof(metric.getValue(text)),'number');
+		}
+
+		test("Metric Interface", function(){
+			checkInterface(readable.FleschKincaidReadingEase);
+			checkInterface(readable.ColemanLiauIndex);
+			checkInterface(readable.AutomatedReadabilityIndex);
+			checkInterface(readable.GunningFogIndex);
+			checkInterface(readable.SMOG);
+		});
+
+		test("Grade Metric", function(){
+			var text = readable.Text("Hello World. Testing is nice, isn't it");
+			deepEqual(readable.ColemanLiauIndex.getGrade(text),'Kindergarten');
+			deepEqual(readable.SMOG.getRoughGrade(text),'Elementary school');
+		});
+
+	</script>
+
+</body>
+</html>
