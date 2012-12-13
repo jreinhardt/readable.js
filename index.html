@@ -141,7 +141,7 @@
 						grades[i] = 0;
 					}
 				} else {
-					var text = Text(document.form.text.value);
+					var text = readable.Text(document.form.text.value);
 					for(var i=0;i<metrics.length;i++){
 						grades[i] = metrics[i].score(text);
 					}
