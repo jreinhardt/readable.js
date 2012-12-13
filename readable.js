@@ -156,6 +156,42 @@ var readable = (function(module) {
 	module.GradeMetricPrototype = new GradeMetricPrototype();
 
 
+	function isDecendant(object, prototype){
+		//Go up the prototype chain until a match is found or it ends
+		var proto = Object.getPrototypeOf(object);
+		while(proto !== prototype && proto instanceof Object){
+			proto = Object.getPrototypeOf(proto);
+		}
+		return proto === prototype;
+	}
+
+	/*
+	Obtain an array with selections of Metrics
+	*/
+
+	module.getAllMetrics = function(){
+		var metrics = [];
+		for(var attr in this){
+			//Slightly hacky, but I think it is reasonable to assume that Prototypes have Prototype in their name.
+			if(isDecendant(this[attr],module.MetricPrototype) && attr.search("Prototype") < 0){
+				metrics.push(this[attr]);
+			}
+		}
+		return metrics;
+	};
+
+	module.getAllGradeMetrics = function(){
+		var metrics = [];
+		for(var attr in this){
+			//Slightly hacky, but I think it is reasonable to assume that Prototypes have Prototype in their name.
+			if(isDecendant(this[attr],module.GradeMetricPrototype) && attr.search("Prototype") < 0){
+				metrics.push(this[attr]);
+			}
+		}
+		return metrics;
+	};
+
+
 	/*
 	Factory for Text objects
 	*/

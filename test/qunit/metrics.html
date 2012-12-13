@@ -47,6 +47,13 @@
 			deepEqual(readable.SMOG.getRoughGrade(text),'Elementary school');
 		});
 
+		test("Metric Selection", function(){
+			var metrics = readable.getAllMetrics();
+			ok(metrics.length > 0);
+			var grademetrics = readable.getAllGradeMetrics();
+			ok(grademetrics.length > 0);
+		});
+
 	</script>
 
 </body>
