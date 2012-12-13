@@ -112,7 +112,6 @@ var readable = (function(module) {
 			return "https://en.wikipedia.org/wiki/SMOG";
 		}
 		this.getValue = function(text){
-			console.log(text);
 			var pps = text.getNumPolysyllables() / text.getNumSentences();
 			return 1.043*Math.sqrt(30*pps) + 3.1291;
 		}
