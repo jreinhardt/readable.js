@@ -84,6 +84,7 @@ var readable = (function(module) {
 	*/
 
 	module.MetricPrototype = {
+		getId: function(){throw "Method getId not implemented";},
 		getName: function(){throw "Method getName not implemented";},
 		getDescription: function(){throw "Method getDescription not implemented in " + this.getName();},
 		getReference: function(){throw "Method getReference not implemented in " + this.getName();},

@@ -25,6 +25,9 @@
 			deepEqual(proto,readable.MetricPrototype);
 
 			//Check the interface and return types
+			deepEqual(typeof(metric.getId()),'string');
+			ok(metric.getId().length > 0);
+			ok(metric.getId().search(" ") < 0);
 			deepEqual(typeof(metric.getName()),'string');
 			ok(metric.getName().length > 0);
 			deepEqual(typeof(metric.getDescription()),'string');
