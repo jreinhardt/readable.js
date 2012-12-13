@@ -91,20 +91,20 @@ var readable = (function(module) {
 		};
 		this.getName = function(){
 			return "Gunning-Fog Index";
-		}
+		};
 		this.getDescription = function(){
 			return "Returns the Gunning-Fog index " +
 			"indicating the number of years of education necessary to " +
 			"understand the text.";
-		}
+		};
 		this.getReference = function(){
 			return "https://en.wikipedia.org/wiki/Gunning_fog_index";
-		}
+		};
 		this.getValue = function(text){
 			var wps = text.getNumWords() / text.getNumSentences();
 			var ppw = text.getNumPolysyllables() / text.getNumWords();
 			return 0.4*(wps + 100.*ppw);
-		}
+		};
 	}
 	GunningFogIndex.prototype = module.GradeMetricPrototype;
 
@@ -117,19 +117,19 @@ var readable = (function(module) {
 		};
 		this.getName = function(){
 			return "SMOG Grade";
-		}
+		};
 		this.getDescription = function(){
 			return "Returns the SMOG Grade " +
 			"indicating the number of years of education necessary to " +
 			"understand the text. Slightly different from the SMOG index";
-		}
+		};
 		this.getReference = function(){
 			return "https://en.wikipedia.org/wiki/SMOG";
-		}
+		};
 		this.getValue = function(text){
 			var pps = text.getNumPolysyllables() / text.getNumSentences();
 			return 1.043*Math.sqrt(30*pps) + 3.1291;
-		}
+		};
 	}
 	SMOG.prototype = module.GradeMetricPrototype;
 
