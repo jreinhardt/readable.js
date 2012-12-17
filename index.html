@@ -44,6 +44,13 @@
 			var data;
 			var metrics = readable.getAllGradeMetrics();
 
+			var labelSize = 200;
+
+			var x = d3.scale.linear()
+				.domain([0,22])
+				.range([labelSize,600]);
+
+
 			/* Find the idx for entry for a text in data from the texts name */
 			function findIdx(data,name){
 				for(var i=0;i<data.length;i++){
@@ -88,7 +95,7 @@
 					chart.selectAll("rect."+metrics[j].getId()).data(data, function(d){return d.name;})
 						.enter().append("rect")
 						.attr("class",metrics[j].getId())
-						.attr("x", function(d,i) {return  Math.max(1,d.grades[j]*20)})
+						.attr("x", function(d,i) {return  x(Math.max(1,d.grades[j]))})
 						.attr("y", function(d,i) {return 20*i})
 						.attr("width", function(d,i) {return 4})
 						.attr("height", function(d,i) {return 18});
@@ -97,15 +104,15 @@
 				chart.selectAll("text.label").data(data)
 					.enter().append("text")
 					.attr("class","label")
-					.attr("x", function(d,i) {return 600})
+					.attr("x", function(d,i) {return 0})
 					.attr("y", function(d,i) {return 20*(i+1)-2})
-					.attr("text-anchor","end").text(function(d,i) {return d.name});
+					.attr("text-anchor","begin").text(function(d,i) {return d.name});
 
 				//Scale
 				chart.selectAll("text.scale").data(SCALE)
 					.enter().append("text")
 					.attr("class","scale")
-					.attr("x", function(d,i) {return 20*d.at;})
+					.attr("x", function(d,i) {return x(d.at);})
 					.attr("y", function(d,i) {return 150})
 					.attr("text-anchor","middle").text(function(d,i) {return d.name});
 
@@ -140,7 +147,7 @@
 					(function(j){
 						chart.selectAll("rect."+metrics[j].getId()).data(data, function(d){return d.name;})
 							.transition().duration(500)
-							.attr("x", function(d,i) {return  Math.max(1,d.grades[j]*20)})
+							.attr("x", function(d,i) {return x(Math.max(1,d.grades[j]))})
 							.attr("y", function(d,i) {return 20*i});
 					})(j);
 				}
@@ -148,9 +155,9 @@
 				//Text name
 				chart.selectAll("text.label").data(data, function(d){return d.name;})
 					.transition().duration(500)
-					.attr("x", function(d,i) {return 600})
+					.attr("x", function(d,i) {return 0})
 					.attr("y", function(d,i) {return 20*(i+1)-2})
-					.attr("text-anchor","end").text(function(d,i) {return d.name});
+					.text(function(d,i) {return d.name});
 			}
 
 		</script>
@@ -209,7 +216,7 @@
 			<p>Type or paste a text and see how readable it is compared to other
 			texts:</p>
 			<form name="form">
-				<textarea name="text" id="text" cols="80" rows="10"></textarea>
+				<textarea name="text" id="text" cols="72" rows="10"></textarea>
 			</form>
 
 			<div id="results"></div>
