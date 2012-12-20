@@ -16,6 +16,9 @@
 
 		test("Counting syllables", function() {
 			equal(readable.countSyllables(""), 0);
+			equal(readable.countSyllables("hi"), 1);
+			equal(readable.countSyllables("movie"), 2);
+			equal(readable.countSyllables("rented"), 2);
 			equal(readable.countSyllables("hello"), 2);
 			equal(readable.countSyllables("world"), 1);
 			equal(readable.countSyllables("reproducibility"), 7);
