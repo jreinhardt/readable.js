@@ -3,6 +3,14 @@
 
 var readable = (function(module) {
 	/*
+	check word for suffix
+	*/
+	module.hasSuffix = function (word,suffix){
+		return word.slice(word.length - suffix.length) === suffix;
+	};
+
+
+	/*
 	Count syllables in a word.
 
 	This function returns the approximate number of syllables in the given word.
@@ -22,15 +30,16 @@ var readable = (function(module) {
 			if (word[n - 1] === 'e' && word[n - 2] !== 'l') {
 				word = word.substring(0, n - 1);
 				n -= 1;
-			} else if (word[n - 2] === 'e' && (word[n - 1] === 's' || word[n - 1] === 'd')) {
+			} else if(module.hasSuffix(word,'el') || module.hasSuffix(word,'ed')){
 				word = word.substring(0, n - 2);
 				n -= 2;
 			}
 			var s = 0;
 			var v = false;
 			var i;
+			var vowels = 'aeiouy';
 			for (i = 0; i < n; i += 1) {
-				if (word[i] === 'a' || word[i] === 'e' || word[i] === 'i' || word[i] === 'o' || word[i] === 'u' || word[i] === 'y') {
+				if (vowels.indexOf(word[i]) >= 0) {
 					if (!v) {
 						s += 1;
 					}
@@ -41,14 +50,6 @@ var readable = (function(module) {
 			}
 			return s;
 		}
-	};
-
-
-	/*
-	check word for suffix
-	*/
-	module.hasSuffix = function (word,suffix){
-		return word.slice(word.length - suffix.length) === suffix;
 	};
 
 
@@ -66,8 +67,8 @@ var readable = (function(module) {
 		} else if(numSyl > 3){
 			return true;
 		}
-		//if word has 3 syllables, it might be simple of complex depending on the
-		//suffix
+		//if word has 3 syllables, it might be simple of complex depending on
+		//the suffix
 		var suffixes = new Array('es','ed','ing','ity');
 		for (var i=0; i < suffixes.length;i++){
 			if (module.hasSuffix(word,suffixes[i])){
