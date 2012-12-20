@@ -1,6 +1,6 @@
 //Several Simple Readability Metrics, that do not justify a own file
 
-var readable = (function(module) {
+readable = (function(module) {
 	/*
 	The constructor for the metric objects is not exposed in module, as the
 	metric objects have no state, no need to construct more of them
@@ -136,4 +136,4 @@ var readable = (function(module) {
 	module.SMOG = new SMOG();
 		
 	return module;
-}(readable || {}));
+}(readable));

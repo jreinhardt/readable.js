@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Tests for the text module</title>
+	<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.10.0.css">
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="http://code.jquery.com/qunit/qunit-1.10.0.js"></script>
+	<script src="../../src/language.js"></script>
+	<script src="../../src/text.js"></script>
+	<script>
+
+		test("Text object", function() {
+			var text = readable.Text("Yeah! Bucket the Rocket! Fantastic!");
+			equal(text.getText(),"Yeah! Bucket the Rocket! Fantastic!");
+			deepEqual(text.getSentences(),["Yeah","Bucket the Rocket","Fantastic"]);
+			deepEqual(text.getSentences(),["Yeah","Bucket the Rocket","Fantastic"]);
+			deepEqual(text.getWords(),["Yeah","Bucket", "the", "Rocket", "Fantastic"]);
+			deepEqual(text.getWords(),["Yeah","Bucket", "the", "Rocket", "Fantastic"]);
+			equal(text.getNumLetters(),28);
+			equal(text.getNumLetters(),28);
+			equal(text.getNumSyllables(),9);
+			equal(text.getNumSyllables(),9);
+			equal(text.getNumWords(),5);
+			equal(text.getNumWords(),5);
+			equal(text.getNumPolysyllables(),1);
+			equal(text.getNumPolysyllables(),1);
+			equal(text.getNumSentences(),3);
+			equal(text.getNumSentences(),3);
+		});
+
+		test("Counting letters", function() {
+			// Normal letters
+			equal(readable.Text("").getNumLetters(), 0);
+			equal(readable.Text("aEuV").getNumLetters(), 4);
+
+			// Ignore non-letters
+			equal(readable.Text("a$!.-/\\_;").getNumLetters(), 1);
+
+			// Funky letters
+			equal(readable.Text("äöüÄÖÜß").getNumLetters(), 6);
+		});
+
+		test("Splitting into words", function() {
+			deepEqual(readable.Text("Hello World").getWords(),["Hello","World"]);
+			deepEqual(readable.Text("Hello   ").getWords(),["Hello"]);
+			deepEqual(readable.Text("Hello   World").getWords(),["Hello","World"]);
+			deepEqual(readable.Text("Hello      World").getWords(),["Hello","World"]);
+			deepEqual(readable.Text("Hello\nWorld").getWords(),["Hello","World"]);
+		});
+
+		test("Splitting into sentences", function() {
+			deepEqual(readable.Text("It was cold outside. The trees were covered in snow.").getSentences(),["It was cold outside","The trees were covered in snow"]);
+			deepEqual(readable.Text("The horror ...").getSentences(),["The horror"]);
+			deepEqual(readable.Text("Did you see her? No I didn't!").getSentences(),["Did you see her","No I didn't"]);
+			deepEqual(readable.Text("WTF??!!??").getSentences(),["WTF"]);
+		});
+
+		test("Count complex words", function() {
+			equal(readable.Text("Hallo").getNumPolysyllables(),0);
+			equal(readable.Text("Hello Mister representive").getNumPolysyllables(),1);
+		});
+
+	</script>
+</body>
+</html>
