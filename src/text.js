@@ -1,3 +1,4 @@
+'use strict';
 //The text object
 
 var readable = (function(module) {
@@ -8,23 +9,38 @@ var readable = (function(module) {
 		var members = {};
 
 		function memoize(key,calculator) {
-			if(members[key] == undefined){
+			if(members[key] === undefined){
 				members[key] = calculator();
 			}
 			return members[key];
-		};
+		}
 
 		var obj = {
-			getText: function(){return text;},
-			getSentences: function(){return memoize("sentences",splitIntoSentences);},
-			getWords: function(){return memoize("words",splitIntoWords);},
-			getNumLetters: function(){return memoize("numLetters",countLetters);},
-			getNumSyllables: function(){return memoize("numSyllables",countTextSyllables);},
-			getNumWords: function(){return memoize("numWords",countWords);},
-			getNumPolysyllables: function(){return memoize("numPolysyllables",countPolysyllables);},
-			getNumSentences: function(){return memoize("numSentences",countSentences);},
-
-		}
+			getText: function(){
+				return text;
+			},
+			getSentences: function(){
+				return memoize('sentences',splitIntoSentences);
+			},
+			getWords: function(){
+				return memoize('words',splitIntoWords);
+			},
+			getNumLetters: function(){
+				return memoize('numLetters',countLetters);
+			},
+			getNumSyllables: function(){
+				return memoize('numSyllables',countTextSyllables);
+			},
+			getNumWords: function(){
+				return memoize('numWords',countWords);
+			},
+			getNumPolysyllables: function(){
+				return memoize('numPolysyllables',countPolysyllables);
+			},
+			getNumSentences: function(){
+				return memoize('numSentences',countSentences);
+			}
+		};
 
 
 		/*
@@ -33,11 +49,11 @@ var readable = (function(module) {
 		Returns an array containing all the words of the text.
 		*/
 		function splitIntoWords() {
-			var res = new Array();
+			var res = [];
 			var words = text.split(/[\s?!:;,\.]+/);
 			for(var i=0;i<words.length;i++){
 				var word = words[i].trim();
-				if(word == ""){
+				if(word === ''){
 					continue;
 				}
 				res.push(word);
@@ -52,11 +68,11 @@ var readable = (function(module) {
 		Returns an array containing all the sentences of the text.
 		*/
 		function splitIntoSentences() {
-			var res = new Array();
-			var sentences = text.split(/[?!:;\.]+/)
+			var res = [];
+			var sentences = text.split(/[?!:;\.]+/);
 			for(var i=0;i<sentences.length;i++){
 				var sentence = sentences[i].trim();
-				if(sentence == ""){
+				if(sentence === ''){
 					continue;
 				}
 				res.push(sentence);
@@ -68,7 +84,8 @@ var readable = (function(module) {
 		/*
 		Count the letters in a text.
 
-		This function returns the number of letters ([a-zA-Z]) in the given text.
+		This function returns the number of letters ([a-zA-Z]) in the given
+		text.
 		*/
 		function countLetters() {
 			var nl = 0;
@@ -113,13 +130,14 @@ var readable = (function(module) {
 		with three or more syllables, not counting some very common suffixes.
 		*/
 		function countPolysyllables(){
-			var n_p = 0;
-			for(var i=0; i < obj.getWords().length;i++){
-				if(module.isPolysyllable(obj.getWords()[i])){
-					n_p += 1;
+			var numPoly = 0;
+			var words = obj.getWords();
+			for(var i=0; i < words.length;i++){
+				if(module.isPolysyllable(words[i])){
+					numPoly += 1;
 				}
 			}
-			return n_p;
+			return numPoly;
 		}
 
 
@@ -134,6 +152,8 @@ var readable = (function(module) {
 
 
 		return obj;
-	}
+	};
+
 	return module;
+
 }(readable || {}));

@@ -17,17 +17,21 @@ var options = {
 	undef: true,
 	unused: true,
 	strict: true,
+	globalstrict: true,
 	trailing: true,
 	maxparams: 4,
 	maxdepth: 5,
 	maxcomplexity: 10,
 	maxlen: 80,
-	};
+};
 
 var clean = true;
 
 var files = fs.readdirSync("./src");
 for(var i = 0;i<files.length;i++){
+	if(files[i].slice(-3) !== ".js"){
+		continue;
+	}
 	var src = fs.readFileSync("./src/" + files[i],'utf8');
 	if(jshint.JSHINT(src,options)){
 		continue;

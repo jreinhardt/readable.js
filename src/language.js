@@ -1,3 +1,4 @@
+'use strict';
 //language related utilities
 
 var readable = (function(module) {
@@ -12,7 +13,7 @@ var readable = (function(module) {
 	*/
 	module.countSyllables = function (word) {
 		var n = word.length;
-		if (n == 0) {
+		if (n === 0) {
 			return 0;
 		} else if (n <= 3) {
 			return 1;
@@ -29,7 +30,7 @@ var readable = (function(module) {
 			var v = false;
 			var i;
 			for (i = 0; i < n; i += 1) {
-				if (word[i] == 'a' || word[i] == 'e' || word[i] == 'i' || word[i] == 'o' || word[i] == 'u' || word[i] == 'y') {
+				if (word[i] === 'a' || word[i] === 'e' || word[i] === 'i' || word[i] === 'o' || word[i] === 'u' || word[i] === 'y') {
 					if (!v) {
 						s += 1;
 					}
@@ -40,15 +41,15 @@ var readable = (function(module) {
 			}
 			return s;
 		}
-	}
+	};
 
 
 	/*
 	check word for suffix
 	*/
 	module.hasSuffix = function (word,suffix){
-		return word.slice(word.length - suffix.length) == suffix;
-	}
+		return word.slice(word.length - suffix.length) === suffix;
+	};
 
 
 	/*
@@ -58,22 +59,24 @@ var readable = (function(module) {
 	common suffixes like -es, -ed, -ing, -ity.
 	*/
 	module.isPolysyllable = function (word) {
-		var n_syl = module.countSyllables(word);
+		var numSyl = module.countSyllables(word);
 		//handle clear cases
-		if(n_syl < 3){
+		if(numSyl < 3){
 			return false;
-		} else if(n_syl > 3){
+		} else if(numSyl > 3){
 			return true;
 		}
 		//if word has 3 syllables, it might be simple of complex depending on the
 		//suffix
-		suffixes = new Array("es","ed","ing","ity");
+		var suffixes = new Array('es','ed','ing','ity');
 		for (var i=0; i < suffixes.length;i++){
 			if (module.hasSuffix(word,suffixes[i])){
 				return false;
 			}
 		}
 		return true;
-	}
+	};
+
 	return module;
+
 }(readable || {}));

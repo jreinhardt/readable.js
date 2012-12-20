@@ -1,6 +1,7 @@
+'use strict';
 //Several Simple Readability Metrics, that do not justify a own file
 
-readable = (function(module) {
+var readable = (function(module) {
 	/*
 	The constructor for the metric objects is not exposed in module, as the
 	metric objects have no state, no need to construct more of them
@@ -8,19 +9,20 @@ readable = (function(module) {
 
 	function FleschKincaidReadingEase(){
 		this.getId = function(){
-			return "FleschKincaidEase";
+			return 'FleschKincaidEase';
 		};
 		this.getName = function(){
-			return "Flesch-Kincaid Reading Ease";
+			return 'Flesch-Kincaid Reading Ease';
 		};
 		this.getDescription = function(){
-			return "Returns the Flesch-Kincaid reading ease, a number " +
-			"(usually) between 0 and 100, where larger numbers indicate " +
-			"easier text. Not to be confused with the Flesch-Kincaid " +
-			"Grade Level.";
+			return 'Returns the Flesch-Kincaid reading ease, a number ' +
+			'(usually) between 0 and 100, where larger numbers indicate ' +
+			'easier text. Not to be confused with the Flesch-Kincaid ' +
+			'Grade Level.';
 		};
 		this.getReference = function(){
-			return "https://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test";
+			return 'https://en.wikipedia.org/wiki/' +
+			'Flesch-Kincaid_Readability_Test';
 		};
 		this.getValue = function(text){
 			var wps = text.getNumWords() / text.getNumSentences();
@@ -35,18 +37,18 @@ readable = (function(module) {
 
 	function ColemanLiauIndex(){
 		this.getId = function(){
-			return "ColemanLiau";
+			return 'ColemanLiau';
 		};
 		this.getName = function(){
-			return "Coleman-Liau Index";
+			return 'Coleman-Liau Index';
 		};
 		this.getDescription = function(){
-			return "Returns the Coleman-Liau readability index " +
-			"indicating the number of years of education necessary to " +
-			"understand the text.";
+			return 'Returns the Coleman-Liau readability index ' +
+			'indicating the number of years of education necessary to ' +
+			'understand the text.';
 		};
 		this.getReference = function(){
-			return "https://en.wikipedia.org/wiki/Coleman-Liau_Index";
+			return 'https://en.wikipedia.org/wiki/Coleman-Liau_Index';
 		};
 		this.getValue = function(text){
 			var lpw = 100*text.getNumLetters()/text.getNumWords();
@@ -61,18 +63,18 @@ readable = (function(module) {
 
 	function AutomatedReadabilityIndex(){
 		this.getId = function(){
-			return "ARI";
+			return 'ARI';
 		};
 		this.getName = function(){
-			return "Automated Readability Index";
-		}
+			return 'Automated Readability Index';
+		};
 		this.getDescription = function(){
-			return "Returns the Automated Readability Index " +
-			"indicating the number of years of education necessary to " +
-			"understand the text.";
+			return 'Returns the Automated Readability Index ' +
+			'indicating the number of years of education necessary to ' +
+			'understand the text.';
 		};
 		this.getReference = function(){
-			return "https://en.wikipedia.org/wiki/Automated_Readability_Index";
+			return 'https://en.wikipedia.org/wiki/Automated_Readability_Index';
 		};
 		this.getValue = function(text){
 			var lpw = text.getNumLetters()/text.getNumWords();
@@ -87,23 +89,23 @@ readable = (function(module) {
 
 	function GunningFogIndex(){
 		this.getId = function(){
-			return "GunningFog";
+			return 'GunningFog';
 		};
 		this.getName = function(){
-			return "Gunning-Fog Index";
+			return 'Gunning-Fog Index';
 		};
 		this.getDescription = function(){
-			return "Returns the Gunning-Fog index " +
-			"indicating the number of years of education necessary to " +
-			"understand the text.";
+			return 'Returns the Gunning-Fog index ' +
+			'indicating the number of years of education necessary to ' +
+			'understand the text.';
 		};
 		this.getReference = function(){
-			return "https://en.wikipedia.org/wiki/Gunning_fog_index";
+			return 'https://en.wikipedia.org/wiki/Gunning_fog_index';
 		};
 		this.getValue = function(text){
 			var wps = text.getNumWords() / text.getNumSentences();
 			var ppw = text.getNumPolysyllables() / text.getNumWords();
-			return 0.4*(wps + 100.*ppw);
+			return 0.4*(wps + 100*ppw);
 		};
 	}
 	GunningFogIndex.prototype = module.GradeMetricPrototype;
@@ -113,18 +115,18 @@ readable = (function(module) {
 
 	function SMOG(){
 		this.getId = function(){
-			return "SMOG";
+			return 'SMOG';
 		};
 		this.getName = function(){
-			return "SMOG Grade";
+			return 'SMOG Grade';
 		};
 		this.getDescription = function(){
-			return "Returns the SMOG Grade " +
-			"indicating the number of years of education necessary to " +
-			"understand the text. Slightly different from the SMOG index";
+			return 'Returns the SMOG Grade ' +
+			'indicating the number of years of education necessary to ' +
+			'understand the text. Slightly different from the SMOG index';
 		};
 		this.getReference = function(){
-			return "https://en.wikipedia.org/wiki/SMOG";
+			return 'https://en.wikipedia.org/wiki/SMOG';
 		};
 		this.getValue = function(text){
 			var pps = text.getNumPolysyllables() / text.getNumSentences();
