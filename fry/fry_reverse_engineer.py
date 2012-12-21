@@ -52,18 +52,20 @@ midline_transformed[0,:] = 68./33.*x + 108
 midline_transformed[1,:] = f(y)
 pl.plot(midline_transformed[0,:],midline_transformed[1,:])
 
+def write_line_data(x,y,format='%.3f'):
+	dicts = map(lambda t: ("{x: %s, y: %s}" % (format,format)) % t,zip(x,y))
+	return "{points: [" + ",".join(dicts) + "]}"
+
 #write out transformed data
 fid = open("isolines.dat","w")
 fid.write("var isolines = [\n")
 for i in range(lines.shape[0]):
-	x = reduce(lambda x, y: x + (", %.3f" % y), lines_transformed[i,0,1:],"%.3f" % lines_transformed[i,0,0])
-	y = reduce(lambda x, y: x + (", %.3f" % y), lines_transformed[i,1,1:],"%.3f" % lines_transformed[i,1,0])
-	fid.write("{value: %f, x: [%s], y: [%s]},\n" % (i + 0.5, x, y))
+	fid.write(write_line_data(lines_transformed[i,0,:],lines_transformed[i,1,:]))
+	fid.write(",\n")
 fid.write("];\n\n")
-fid.write("var middleline = \n")
-x = reduce(lambda x, y: x + (", %.3f" % y), lines_transformed[i,0,1:],"%.3f" % lines_transformed[i,0,0])
-y = reduce(lambda x, y: x + (", %.3f" % y), lines_transformed[i,1,1:],"%.3f" % lines_transformed[i,1,0])
-fid.write("{value: %f, x: [%s], y: [%s]};\n" % (i + 0.5, x, y))
+fid.write("var midline = \n")
+fid.write(write_line_data(midline_transformed[0,:],midline_transformed[1,:]))
+fid.write(";\n")
 fid.close()
 
 #pl.show()
