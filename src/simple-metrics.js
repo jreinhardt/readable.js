@@ -35,6 +35,33 @@ var readable = (function(module) {
 	module.FleschKincaidReadingEase = new FleschKincaidReadingEase();
 
 
+	function FleschKincaidGradeLevel(){
+		this.getId = function(){
+			return 'FleschKincaidGradeLevel';
+		};
+		this.getName = function(){
+			return 'Flesch-Kincaid Grade Level';
+		};
+		this.getDescription = function(){
+			return 'Returns the Flesch-Kincaid grade level, a number ' +
+			'indicating the number of years of education necessary to ' +
+			'understand the text.';
+		};
+		this.getReference = function(){
+			return 'https://en.wikipedia.org/wiki/' +
+			'Flesch-Kincaid_Readability_Test';
+		};
+		this.getValue = function(text){
+			var wps = text.getNumWords() / text.getNumSentences();
+			var spw = text.getNumSyllables() / text.getNumWords();
+			return -15.59 + 0.39 * wps + 11.8 * spw;
+		};
+	}
+	FleschKincaidGradeLevel.prototype = module.GradeMetricPrototype;
+
+	module.FleschKincaidGradeLevel = new FleschKincaidGradeLevel();
+
+
 	function ColemanLiauIndex(){
 		this.getId = function(){
 			return 'ColemanLiauIndex';
