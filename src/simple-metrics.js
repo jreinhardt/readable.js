@@ -163,6 +163,34 @@ var readable = (function(module) {
 	SMOG.prototype = module.GradeMetricPrototype;
 
 	module.SMOG = new SMOG();
-		
+
+
+	function FORCAST(){
+		this.getId = function(){
+			return 'FORCAST';
+		};
+		this.getName = function(){
+			return 'FORCAST';
+		};
+		this.getDescription = function(){
+			return 'Returns the FORCAST Grade, which is a simple measure ' +
+			'of readablity based only on a ' +
+			'vocabulary element and therefore suitable for a broad range ' +
+			'of text genres. It is returning a grade level, indicating the ' +
+			'number of years of education necessary to understand the text.';
+		};
+		this.getReference = function(){
+			return 'https://en.wikipedia.org/wiki/Readability';
+		};
+		this.getValue = function(text){
+			var n = text.getNumMonosyllables()/text.getNumWords()*150;
+			return 20 - n/10;
+		};
+	};
+	FORCAST.prototype = module.GradeMetricPrototype;
+
+	module.FORCAST = new FORCAST();
+
+
 	return module;
 }(readable));

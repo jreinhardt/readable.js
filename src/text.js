@@ -37,6 +37,9 @@ var readable = (function(module) {
 			getNumPolysyllables: function(){
 				return memoize('numPolysyllables',countPolysyllables);
 			},
+			getNumMonosyllables: function(){
+				return memoize('numMonosyllables',countMonosyllables);
+			},
 			getNumSentences: function(){
 				return memoize('numSentences',countSentences);
 			}
@@ -140,6 +143,23 @@ var readable = (function(module) {
 			return numPoly;
 		}
 
+
+		/*
+		Count monosyllables
+
+		Returns the number of monosyllables in the text. Polysyllables are words
+		with only one syllable.
+		*/
+		function countMonosyllables(){
+			var numMono = 0;
+			var words = obj.getWords();
+			for(var i=0; i < words.length;i++){
+				if(module.countSyllables(words[i]) === 1){
+					numMono += 1;
+				}
+			}
+			return numMono;
+		}
 
 		/*
 		Count sentences
