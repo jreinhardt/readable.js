@@ -43,7 +43,7 @@ for l in range(lines.shape[0]):
 	y = np.linspace(lines[l,1],lines[l,3],n_samples)
 	lines_transformed[l,0,:] = 68./33.*x + 108
 	lines_transformed[l,1,:] = f(y)
-	pl.plot(lines_transformed[l,0,:],lines_transformed[l,1,:])
+	pl.plot(lines_transformed[l,0,:],lines_transformed[l,1,:],'b')
 
 #the middle line
 x = np.linspace(midline[0,0],midline[-1,0],n_samples)
@@ -68,4 +68,17 @@ fid.write(write_line_data(midline_transformed[0,:],midline_transformed[1,:]))
 fid.write(";\n")
 fid.close()
 
-#pl.show()
+
+#Flesch Kincaid iso lines for comparison
+#f = 39/senphw + 0.118*sylphw - 15.59
+#senphw(sylphw) = 39/(f - 0.118*sylphw + 15.59)
+x= np.linspace(100,200,100)
+for f in [0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5]:
+	y = 39./(f - 0.118*x + 15.59)
+	I = y > 0
+	pl.plot(x[I],y[I],'r',label="%f" % f)
+
+pl.xlim((100,200))
+pl.ylim((0,25))
+
+pl.show()
