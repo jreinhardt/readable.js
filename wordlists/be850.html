@@ -12,7 +12,12 @@
 				bloom.add(words[i]);
 			}
 			var base64 = readable.base64encode(bloom.toBytestream());
-			$(".result").html(base64);
+			var nice = "";
+			for(var i = 0; i < Math.floor(base64.length/70); i++){
+				nice += "'" + base64.slice(70*i,70*(i+1)) + "' +<br>";
+			}
+			nice += "'" + base64.slice(70*i) + "'<br>";
+			$(".result").html(nice);
 		});
 
 		</script>
