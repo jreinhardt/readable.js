@@ -9,7 +9,7 @@
 			var words = $(".wordlist").html().split("\n");
 			var bloom = new readable.BloomFilter(72000, 17);
 			for ( var i=0; i < words.length; i++){
-				bloom.add(words[i]);
+				bloom.add(words[i].toLowerCase());
 			}
 			var base64 = readable.base64encode(bloom.toBytestream());
 			var nice = "";
