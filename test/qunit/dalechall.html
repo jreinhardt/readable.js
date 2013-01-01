@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Dale Chall Readability Score</title>
+	<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.10.0.css">
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="http://code.jquery.com/qunit/qunit-1.10.0.js"></script>
+	<script src="../../utils/blanket.js"></script>
+
+	<script src="../../src/language.js"></script>
+	<script src="../../src/text.js"></script>
+	<script src="../../src/prototypes.js"></script>
+	<script src="../../src/base64.js"></script>
+	<script src="../../src/bloom.js"></script>
+	<script src="../../src/dalechall.js" data-cover></script>
+	<script>
+
+		test("No difficult words", function() {
+			var text = readable.Text("Hello world.");
+			equal(readable.DaleChallReadabilityScore.getValue(text),0.0992);
+		});
+
+		test("Only difficult words", function() {
+			var text = readable.Text("Inappropriate difficulties encountering symbiotic transcendency");
+			equal(readable.DaleChallReadabilityScore.getValue(text),19.6745);
+		});
+
+	</script>
+</body>
+</html>

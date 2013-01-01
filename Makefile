@@ -1,6 +1,6 @@
 .PHONY: clean lint test
 
-SRC= src/language.js src/text.js src/prototypes.js src/simple-metrics.js src/bloom.js src/base64.js
+SRC= src/language.js src/text.js src/prototypes.js src/simple-metrics.js src/bloom.js src/base64.js src/dalechall.js
 
 readable.js: $(SRC)
 	cat $(SRC) > readable.js
@@ -18,6 +18,7 @@ test:
 	x-www-browser localhost:8888/test/qunit/text.html &
 	x-www-browser localhost:8888/test/qunit/bloom.html &
 	x-www-browser localhost:8888/test/qunit/base64.html &
+	x-www-browser localhost:8888/test/qunit/dalechall.html &
 
 clean:
 	rm -rf readable.js
