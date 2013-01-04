@@ -9,7 +9,7 @@ var readable = (function(module) {
 
 	function FleschKincaidReadingEase(){
 		this.getId = function(){
-			return 'FleschKincaidEase';
+			return 'FleschKincaidReadingEase';
 		};
 		this.getName = function(){
 			return 'Flesch-Kincaid Reading Ease';
@@ -37,7 +37,7 @@ var readable = (function(module) {
 
 	function ColemanLiauIndex(){
 		this.getId = function(){
-			return 'ColemanLiau';
+			return 'ColemanLiauIndex';
 		};
 		this.getName = function(){
 			return 'Coleman-Liau Index';
@@ -63,7 +63,7 @@ var readable = (function(module) {
 
 	function AutomatedReadabilityIndex(){
 		this.getId = function(){
-			return 'ARI';
+			return 'AutomatedReadabilityIndex';
 		};
 		this.getName = function(){
 			return 'Automated Readability Index';
@@ -89,7 +89,7 @@ var readable = (function(module) {
 
 	function GunningFogIndex(){
 		this.getId = function(){
-			return 'GunningFog';
+			return 'GunningFogIndex';
 		};
 		this.getName = function(){
 			return 'Gunning-Fog Index';
