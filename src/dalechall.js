@@ -167,7 +167,7 @@ var readable = (function(module) {
 
 	function DaleChallReadabilityScore(){
 		this.getId = function(){
-			return 'DaleChallScore';
+			return 'DaleChallReadabilityScore';
 		};
 		this.getName = function(){
 			return 'Dale-Chall Readability Score';
