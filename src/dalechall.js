@@ -204,5 +204,41 @@ var readable = (function(module) {
 
 	module.DaleChallReadabilityScore = new DaleChallReadabilityScore();
 
+	function DaleChallReadabilityGrade(){
+		this.getId = function(){
+			return 'DaleChallReadabilityGrade';
+		};
+		this.getName = function(){
+			return 'Dale-Chall Readability Grade';
+		};
+		this.getDescription = function(){
+			return 'The Dale-Chall formula uses a list of 3000 simple words ' +
+			'to estimate the readability of a text. Returns a positive number' +
+			', usually between 4 and 10, lower values indicate easier texts. ' +
+			'This metric makes use of a transformation to the US Grade Level ' +
+			'to express the result of the Dale Chall formula as a number ' +
+			'indicating the number of years of education necessary to read ' +
+			'this text.';
+		};
+		this.getReference = function(){
+			return 'https://en.wikipedia.org/wiki/' +
+			'Dale%E2%80%93Chall_readability_formula';
+		};
+		this.getValue = function(text){
+			var dcs = module.DaleChallReadabilityScore.getValue(text);
+			if(dcs < 5){
+				return 4;
+			} else if(dcs < 9){
+				return (dcs - 5)*2 + 4.5;
+			} else {
+				return (dcs - 9)*2.5 + 12.5;
+			}
+		};
+	}
+
+	DaleChallReadabilityGrade.prototype = module.GradeMetricPrototype;
+
+	module.DaleChallReadabilityGrade = new DaleChallReadabilityGrade();
+
 	return module;
 }(readable));
