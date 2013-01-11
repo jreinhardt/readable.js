@@ -4,31 +4,30 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<script src="http://code.jquery.com/jquery-1.8.3.min.js" type="text/javascript"></script>
+		<script src="scratch/jquery-1.8.3.min.js" type="text/javascript"></script>
 		<script src="readable.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
+			var metrics = readable.getAllGradeMetrics();
 			$(document).ready(function() {
-				$('.reference').each(function() {
-				var text = Text($(this).html());
-				var row = "<tr><td>";
-				row += $(this).attr('id');
-				row += "</td><td>";
-				row += text.getFleschKincaidIndex().toFixed(1);
-				row += "</td><td>";
-				row += text.getColemanLiauIndex().toFixed(1);
-				row += "</td><td>";
-				row += text.getAutomatedReadabilityIndex().toFixed(1);
-				row += "</td><td>";
-				row += text.getGunningFogIndex().toFixed(1);
-				row += "</td><td>";
-				row += text.getSmogGrade().toFixed(1);
-				row += " </td></tr>";
+				var row = $('<tr/>');
+				row.append($('<th/>').append('Reference name'));
+				for(var i = 0; i < metrics.length; i++){
+					row.append($('<th/>').append(metrics[i].getName()));
+				}
+				console.log(row);
 				$('#results').append(row);
+				$('.reference').each(function() {
+					var row = $('<tr/>');
+					var text = readable.Text($(this).html());
+					row.append($('<td/>').append($(this).attr('id')));
+					for(var i = 0; i < metrics.length; i++){
+						row.append($('<td/>').append(metrics[i].getValue(text).toFixed(2)));
+					}
+					$('#results').append(row);
 				});
 			});
 		</script>
-
 		<style>
 			.reference{display:none;}
 		</style>
@@ -544,7 +543,6 @@ Nadine now can’t wait to return to Britain and be reunited with her family. Sh
 		</div>
 
 		<table id="results" border="1">
-			<tr><th>Text</th><th>Flesch</th><th>Coleman-Liau</th><th>ARI</th><th>Gunning-Fog</th><th>SMOG</th></tr>
 		</table>
 		
 	</body>
